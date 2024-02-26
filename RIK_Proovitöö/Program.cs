@@ -10,7 +10,9 @@ builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddControllers(); // Add this line
+builder.Services.AddControllers();
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.Configuration["BaseAddress"]) });
+
 
 var app = builder.Build();
 
@@ -28,9 +30,8 @@ app.UseRouting();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers(); // Add this line
-});
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

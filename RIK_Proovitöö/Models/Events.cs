@@ -12,7 +12,7 @@ namespace RIK_Proovitöö.Models
         [MaxLength(1000)]
         public string ExtraInfo { get; set; }
 
-        public ICollection<EventAttendee> EventAttendees { get; set; }
+        public ICollection<EventAttendee> EventAttendees { get; set; } = new List<EventAttendee>();
 
     }
 }

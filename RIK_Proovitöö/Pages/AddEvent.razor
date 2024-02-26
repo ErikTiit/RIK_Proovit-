@@ -1,0 +1,35 @@
+﻿@page "/AddEvent"
+@using RIK_Proovitöö.Models
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+@using System.Net.Http.Json
+@inject HttpClient Http
+
+<EditForm Model="newEvent" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText id="name" @bind-Value="newEvent.Name" placeholder="Event Name" />
+    <br />
+
+    <InputDate id="date" @bind-Value="newEvent.Date" Min="@DateTime.Now.ToString("yyyy-MM-dd")" placeholder="Event Date" />
+    <br />
+
+    <InputText id="location" @bind-Value="newEvent.Location" placeholder="Event Location" />
+    <br />
+
+    <InputTextArea id="extrainfo" @bind-Value="newEvent.ExtraInfo" placeholder="Extra Info" />
+    <br />
+
+    <button type="submit">Create Event</button>
+</EditForm>
+
+@code {
+    private Event newEvent = new Event();
+
+    private async Task HandleValidSubmit()
+    {
+        await Http.PostAsJsonAsync("api/Events", newEvent);
+        newEvent = new Event();
+    }
+}

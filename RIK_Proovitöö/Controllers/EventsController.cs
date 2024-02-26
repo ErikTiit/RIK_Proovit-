@@ -55,11 +55,17 @@ namespace RIK_Proovitöö.Controllers
         [HttpPost]
         public async Task<ActionResult<Event>> PostEvent(Event eventItem)
         {
+            if (eventItem.Date <= DateTime.Now)
+            {
+                return BadRequest("The event date must be in the future.");
+            }
+
             _context.Events.Add(eventItem);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetEvent", new { id = eventItem.Id }, eventItem);
         }
+
 
         // DELETE: api/Events/5
         [HttpDelete("{id}")]
