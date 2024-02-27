@@ -40,7 +40,7 @@ namespace RIK_Proovitöö.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEvent(int id, Event eventItem)
         {
-            if (id != eventItem.Id)
+            if (id != eventItem.ID)
             {
                 return BadRequest();
             }
@@ -63,7 +63,7 @@ namespace RIK_Proovitöö.Controllers
             _context.Events.Add(eventItem);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEvent", new { id = eventItem.Id }, eventItem);
+            return CreatedAtAction("GetEvent", new { id = eventItem.ID }, eventItem);
         }
 
 

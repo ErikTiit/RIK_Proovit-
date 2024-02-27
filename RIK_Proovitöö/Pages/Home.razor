@@ -1,5 +1,4 @@
 ﻿@page "/"
-
 @inject HttpClient Http
 
 <h3>Events</h3>
@@ -15,7 +14,7 @@
         {
             foreach (var evt in upcomingEvents)
             {
-                <p>@evt.Name - @evt.Date</p>
+                <p>@evt.Name - @evt.Date - <a href="EventDetails/@evt.Id">Details</a></p>
             }
         }
     </div>
@@ -30,7 +29,7 @@
         {
             foreach (var evt in pastEvents)
             {
-                <p>@evt.Name - @evt.Date</p>
+                <p>@evt.Name - @evt.Date - <a href="EventDetails/@evt.Id">Details</a></p>
             }
         }
     </div>
@@ -51,6 +50,7 @@
 
     public class Event
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public DateTime Date { get; set; }
     }

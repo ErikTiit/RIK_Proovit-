@@ -41,7 +41,7 @@ namespace RIK_Proovitöö.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCompany(int id, Company company)
         {
-            if (id != company.Id)
+            if (id != company.ID)
             {
                 return BadRequest();
             }
@@ -59,7 +59,7 @@ namespace RIK_Proovitöö.Controllers
             _context.Companies.Add(company);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCompany", new { id = company.Id }, company);
+            return CreatedAtAction("GetCompany", new { id = company.ID }, company);
         }
 
         // DELETE: api/Company/5

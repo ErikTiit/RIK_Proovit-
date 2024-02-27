@@ -1,0 +1,73 @@
+﻿@page "/CompanyDetails/{Id}"
+@inject HttpClient Http
+@using RIK_Proovitöö.Models
+@using Microsoft.AspNetCore.Components.Forms
+
+@if (EditableCompany == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <EditForm Model="EditableCompany" OnSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label for="companyName">Company Name:</label>
+            <InputText id="companyName" @bind-Value="EditableCompany.CompanyName" />
+        </div>
+        <div>
+            <label for="registryCode">Registration Code:</label>
+            <InputNumber id="registryCode" @bind-Value="EditableCompany.RegistryCode" />
+        </div>
+        <div>
+            <label for="paymentType">Payment Type:</label>
+            <InputSelect id="paymentType" @bind-Value="EditableCompany.PaymentType">
+                <option value="BankTransfer">Bank Transfer</option>
+                <option value="Cash">Cash</option>
+            </InputSelect>
+        </div>
+        <div>
+            <label for="extraInfo">Extra Info:</label>
+            <InputText id="extraInfo" @bind-Value="EditableCompany.ExtraInfo" />
+        </div>
+
+        <button type="submit">Save</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    public Company? Company { get; set; }
+    private Company? EditableCompany { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Company = await Http.GetFromJsonAsync<Company>($"api/Company/{Id}");
+        if (Company != null)
+        {
+            EditableCompany = new Company
+                {
+                    ID = Company.ID,
+                    CompanyName = Company.CompanyName,
+                    RegistryCode = Company.RegistryCode,
+                    PaymentType = Company.PaymentType,
+                    ExtraInfo = Company.ExtraInfo
+                };
+        }
+    }
+
+    protected async Task HandleSubmit()
+    {
+        if (Id != null && EditableCompany != null)
+        {
+            Company = EditableCompany;
+            Company.ID = int.Parse(Id);
+            var response = await Http.PutAsJsonAsync($"api/Company/{Id}", Company);
+        }
+    }
+
+}

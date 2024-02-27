@@ -1,30 +1,46 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RIK_Proovitöö.Models;
 
-
-public static class EventAttendeesSeed
+public static class EventCompaniesSeed
 {
     public static void Seed(ModelBuilder modelBuilder)
     {
-        var eventAttendees = new List<EventAttendee>
-{
-    new EventAttendee
-    {
-        Id = 1,
-        EventId = 1,
-        IndividualId = 1,
-        CompanyId = null
-    },
-    new EventAttendee
-    {
-        Id = 2,
-        EventId = 1,
-        IndividualId = null,
-        CompanyId = 1
-    },
-    // Add more event attendees as needed...
-};
+        var eventCompanies = new List<EventCompany>();
 
-        modelBuilder.Entity<EventAttendee>().HasData(eventAttendees);
+        for (int i = 1; i <= 50; i++)
+        {
+            for (int j = 1; j <= 50; j++)
+            {
+                eventCompanies.Add(new EventCompany
+                {
+                    EventID = i,
+                    CompanyID = j
+                });
+            }
+        }
+
+        modelBuilder.Entity<EventCompany>().HasData(eventCompanies);
+    }
+}
+
+public static class EventIndividualsSeed
+{
+    public static void Seed(ModelBuilder modelBuilder)
+    {
+        var eventIndividuals = new List<EventIndividual>();
+
+        for (int i = 1; i <= 50; i++)
+        {
+            for (int j = 1; j <= 50; j++)
+            {
+                eventIndividuals.Add(new EventIndividual
+                {
+                    EventID = i,
+                    IndividualID = j
+                });
+            }
+        }
+
+        modelBuilder.Entity<EventIndividual>().HasData(eventIndividuals);
     }
 }

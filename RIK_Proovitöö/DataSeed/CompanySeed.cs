@@ -1,32 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RIK_Proovitöö.Models;
-using System.Collections.Generic;
 
 public static class CompanySeed
 {
     public static void Seed(ModelBuilder modelBuilder)
     {
-        var companies = new List<Company>
+        var companies = new List<Company>();
+        var random = new Random();
+
+        for (int i = 1; i <= 50; i++)
         {
-            new Company
+            companies.Add(new Company
             {
-                Id = 1,
-                CompanyName = "Company 1",
-                RegisteryCode = 123456,
-                AttendeeAmount = 10,
-                PaymentType = PaymentType.Cash,
-                ExtraInfo = "Test extra info 1"
-            },
-            new Company
-            {
-                Id = 2,
-                CompanyName = "Company 2",
-                RegisteryCode = 654321,
-                AttendeeAmount = 20,
-                PaymentType = PaymentType.BankTransfer,
-                ExtraInfo = "Test extra info 2"
-            },
-        };
+                ID = i,
+                CompanyName = $"Company {i}",
+                RegistryCode = random.Next(100000, 999999),
+                PaymentType = (PaymentType)random.Next(0, 2),
+                ExtraInfo = $"Test extra info {i}"
+            });
+        }
 
         modelBuilder.Entity<Company>().HasData(companies);
     }

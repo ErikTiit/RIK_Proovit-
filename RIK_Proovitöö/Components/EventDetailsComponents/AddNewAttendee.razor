@@ -1,0 +1,49 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using RIK_Proovitöö.Models
+@inject HttpClient Http
+
+<EditForm Model="newAttendee" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText id="firstName" @bind-Value="newAttendee.FirstName" placeholder="First Name" />
+    <InputText id="lastName" @bind-Value="newAttendee.LastName" placeholder="Last Name" />
+    <InputNumber id="personalCode" @bind-Value="newAttendee.PersonalCode" placeholder="Personal Code" />
+    <InputSelect id="paymentType" @bind-Value="newAttendee.PaymentType">
+        <option value="">Select a payment type...</option>
+        @foreach (var paymentType in Enum.GetValues<PaymentType>())
+        {
+            <option value="@paymentType">@paymentType</option>
+        }
+    </InputSelect>
+    <InputTextArea id="extraInfo" @bind-Value="newAttendee.ExtraInfo" placeholder="Extra Info" />
+
+    <button type="submit">Add Attendee</button>
+</EditForm>
+
+@code {
+    private Individual newAttendee = new Individual();
+
+    [Parameter]
+    public Event EventDetails { get; set; }
+
+    [Parameter]
+    public EventCallback OnAttendeeAdded { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+        var createdIndividual = await Http.PostAsJsonAsync("/api/Individual", newAttendee);
+        if (createdIndividual.IsSuccessStatusCode)
+        {
+            var individual = await createdIndividual.Content.ReadFromJsonAsync<Individual>();
+            var eventIndividual = new EventIndividual { EventID = EventDetails.ID, IndividualID = individual.ID };
+            var createdEventIndividual = await Http.PostAsJsonAsync("/api/EventIndividual", eventIndividual);
+            if (createdEventIndividual.IsSuccessStatusCode)
+            {
+                OnAttendeeAdded.InvokeAsync(null);
+            }
+        }
+    }
+
+
+}

@@ -1,0 +1,170 @@
+﻿@page "/eventdetails/{id}"
+@using Microsoft.AspNetCore.Components.Forms
+@using System.Net
+@using RIK_Proovitöö.Models
+@using RIK_Proovitöö.Components.EventDetailsComponents
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+
+<h3>Event Details</h3>
+
+@if (eventDetails == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div>
+        <p>@message</p>
+        <h4>@eventDetails.Name</h4>
+        <p>Date: @eventDetails.Date</p>
+        <p>Location: @eventDetails.Location</p>
+        <p>Extra Info: @eventDetails.ExtraInfo</p>
+        <h5>Attendees:</h5>
+        @if (eventIndividuals != null)
+        {
+            foreach (var attendee in eventIndividuals)
+            {
+                if (attendee.Individual != null)
+                {
+                    <p>
+                        @attendee.Individual.FirstName @attendee.Individual.LastName (@attendee.Individual.PersonalCode)
+                        <button onclick="@(async () => await DeleteIndividualAttendee(attendee))">Delete</button>
+                        <button onclick="@(async () => GoToDetails(attendee))">Details</button>
+
+
+                        
+
+                    </p>
+                }
+            }
+        }
+
+        @if (eventCompanies != null)
+        {
+            foreach (var attendee in eventCompanies)
+            {
+                if (attendee.Company != null)
+                {
+                    <p>
+                        @attendee.Company.CompanyName ( @attendee.Company.RegistryCode)
+                        <button onclick="@(async () => DeleteCompanyAttendee(attendee))">Delete</button>
+                        <button onclick="@(async () => GoToDetails(attendee))">Details</button>
+
+
+                    </p>
+                }
+            }
+        }
+
+
+
+
+    </div>
+    <h3>Add New Attendee</h3>
+    <AddNewAttendee EventDetails="eventDetails" OnAttendeeAdded="RefreshPage" />
+}
+
+@code {
+    [Parameter]
+    public string id { get; set; } = string.Empty;
+
+    private Event? eventDetails;
+    private List<EventIndividual>? eventIndividuals;
+    private List<EventCompany>? eventCompanies;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (int.TryParse(id, out var eventId))
+        {
+            try
+            {
+                eventDetails = await Http.GetFromJsonAsync<Event>($"/api/Events/{eventId}");
+                eventIndividuals = await Http.GetFromJsonAsync<List<EventIndividual>>($"/api/EventIndividual/Event/{eventId}");
+                eventCompanies = await Http.GetFromJsonAsync<List<EventCompany>>($"/api/EventCompany/Event/{eventId}");
+
+                foreach (var attendee in eventIndividuals)
+                {
+                    var individual = await Http.GetFromJsonAsync<Individual>($"/api/Individual/{attendee.IndividualID}");
+                    if (individual != null)
+                    {
+                        attendee.Individual = individual;
+                    }
+                }
+
+                foreach (var attendee in eventCompanies)
+                {
+                    var company = await Http.GetFromJsonAsync<Company>($"/api/Company/{attendee.CompanyID}");
+                    if (company != null)
+                    {
+                        attendee.Company = company;
+                    }
+                }
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                Console.WriteLine($"Event with ID {eventId} not found.");
+            }
+        }
+    }
+    private string message;
+
+    private async Task DeleteIndividualAttendee(EventIndividual attendee)
+    {
+        Console.WriteLine($"Deleting individual attendee with EventID {attendee.EventID} and IndividualID {attendee.IndividualID}");
+
+        var response = await Http.DeleteAsync($"/api/EventIndividual/{attendee.EventID}/{attendee.IndividualID}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            eventIndividuals.Remove(attendee);
+            message = "The individual attendee was successfully deleted.";
+        }
+        else
+        {
+            message = "Failed to delete the individual attendee. Please try again.";
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task DeleteCompanyAttendee(EventCompany attendee)
+    {
+        Console.WriteLine($"Deleting company attendee with EventID {attendee.EventID} and CompanyID {attendee.CompanyID}");
+
+        var response = await Http.DeleteAsync($"/api/EventCompany/{attendee.EventID}/{attendee.CompanyID}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            eventCompanies.Remove(attendee);
+            message = "The company attendee was successfully deleted.";
+        }
+        else
+        {
+            message = "Failed to delete the company attendee. Please try again.";
+        }
+
+        StateHasChanged();
+    }
+
+
+
+
+
+    private async Task RefreshPage()
+    {
+        await OnInitializedAsync();
+    }
+
+    private void GoToDetails(EventIndividual attendee)
+    {
+        NavigationManager.NavigateTo($"/IndividualDetails/{attendee.IndividualID}");
+    }
+
+    private void GoToDetails(EventCompany attendee)
+    {
+        NavigationManager.NavigateTo($"/CompanyDetails/{attendee.CompanyID}");
+    }
+
+}

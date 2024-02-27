@@ -10,38 +10,43 @@ public class AppDbContext : DbContext
     public DbSet<Event> Events { get; set; }
     public DbSet<Individual> Individuals { get; set; }
     public DbSet<Company> Companies { get; set; }
-    public DbSet<EventAttendee> EventAttendees { get; set; }
+    public DbSet<EventCompany> EventCompanies { get; set; }
+
+    public DbSet<EventIndividual> EventIndividuals { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        IndividualSeed.Seed(modelBuilder);
+        EventCompaniesSeed.Seed(modelBuilder);
+        EventIndividualsSeed.Seed(modelBuilder);
         CompanySeed.Seed(modelBuilder);
+        IndividualSeed.Seed(modelBuilder);
         EventSeed.Seed(modelBuilder);
-        EventAttendeesSeed.Seed(modelBuilder);
 
-        base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<EventAttendee>()
-            .HasKey(ea => ea.Id);
+        modelBuilder.Entity<EventIndividual>()
+            .HasKey(ei => new { ei.EventID, ei.IndividualID });
 
-        modelBuilder.Entity<EventAttendee>()
-            .HasOne(ea => ea.Event)
-            .WithMany(e => e.EventAttendees)
-            .HasForeignKey(ea => ea.Id);
+        modelBuilder.Entity<EventIndividual>()
+            .HasOne(ei => ei.Event)
+            .WithMany(e => e.EventIndividuals)
+            .HasForeignKey(ei => ei.EventID);
 
-        modelBuilder.Entity<EventAttendee>()
-            .HasOne(ea => ea.Individual)
-            .WithMany(i => i.EventAttendees)
-            .HasForeignKey(ea => ea.IndividualId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<EventIndividual>()
+            .HasOne(ei => ei.Individual)
+            .WithMany(i => i.EventIndividuals)
+            .HasForeignKey(ei => ei.IndividualID);
 
-        modelBuilder.Entity<EventAttendee>()
-            .HasOne(ea => ea.Company)
-            .WithMany(c => c.EventAttendees)
-            .HasForeignKey(ea => ea.CompanyId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<EventCompany>()
+            .HasKey(ec => new { ec.EventID, ec.CompanyID });
+
+        modelBuilder.Entity<EventCompany>()
+            .HasOne(ec => ec.Event)
+            .WithMany(e => e.EventCompanies)
+            .HasForeignKey(ec => ec.EventID);
+
+        modelBuilder.Entity<EventCompany>()
+            .HasOne(ec => ec.Company)
+            .WithMany(c => c.EventCompanies)
+            .HasForeignKey(ec => ec.CompanyID);
     }
-
 }

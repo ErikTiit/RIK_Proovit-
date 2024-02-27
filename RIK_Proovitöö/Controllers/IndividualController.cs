@@ -40,7 +40,7 @@ namespace RIK_Proovitöö.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutIndividual(int id, Individual individual)
         {
-            if (id != individual.Id)
+            if (id != individual.ID)
             {
                 return BadRequest();
             }
@@ -58,7 +58,7 @@ namespace RIK_Proovitöö.Controllers
             _context.Individuals.Add(individual);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetIndividual", new { id = individual.Id }, individual);
+            return CreatedAtAction("GetIndividual", new { id = individual.ID }, individual);
         }
 
         // DELETE: api/Individual/5

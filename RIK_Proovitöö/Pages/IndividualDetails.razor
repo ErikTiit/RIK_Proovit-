@@ -1,0 +1,107 @@
+﻿@page "/IndividualDetails/{Id}"
+@inject NavigationManager NavigationManager
+@using RIK_Proovitöö.Models
+@using Microsoft.AspNetCore.Components.Forms
+@using System.Net
+@inject HttpClient Http
+@using RIK_Proovitöö.Components.EventDetailsComponents
+@using static System.Net.WebRequestMethods
+
+
+
+@if (EditableIndividual == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+
+    <EditForm Model="EditableIndividual" OnSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label for="firstName">First Name:</label>
+            <InputText id="firstName" @bind-Value="EditableIndividual.FirstName" />
+        </div>
+        <div>
+            <label for="lastName">Last Name:</label>
+            <InputText id="lastName" @bind-Value="EditableIndividual.LastName" />
+        </div>
+        <div>
+            <label for="personalCode">Personal Code:</label>
+            <InputNumber id="personalCode" @bind-Value="EditableIndividual.PersonalCode" />
+        </div>
+        <div>
+            <label for="paymentType">Payment Type:</label>
+            <InputSelect id="paymentType" @bind-Value="EditableIndividual.PaymentType">
+                <option value="BankTransfer">Bank Transfer</option>
+                <option value="Cash">Cash</option>
+            </InputSelect>
+        </div>
+        <div>
+            <label for="extraInfo">Extra Info:</label>
+            <InputText id="extraInfo" @bind-Value="EditableIndividual.ExtraInfo" />
+        </div>
+
+        <button type="button" @onclick="HandleReturn">Return</button>
+        <button type="submit" >Save</button>
+
+
+
+    </EditForm>
+}
+
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    public Individual? Individual { get; set; }
+    private Individual? EditableIndividual { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id != null)
+        {
+            var response = await Http.GetFromJsonAsync<Individual>($"api/Individual/{Id}");
+            if (response != null)
+            {
+                Individual = response;
+                EditableIndividual = new Individual
+                    {
+                        ID = Individual.ID,
+                        FirstName = Individual.FirstName,
+                        LastName = Individual.LastName,
+                        PersonalCode = Individual.PersonalCode,
+                        PaymentType = Individual.PaymentType,
+                        ExtraInfo = Individual.ExtraInfo
+                    };
+            }
+        }
+    }
+
+
+
+
+    protected async Task HandleSubmit()
+    {
+        
+        if (Id != null && EditableIndividual != null)
+        {
+            
+            Individual = EditableIndividual;
+            Individual.ID = int.Parse(Id);
+            var response = await Http.PutAsJsonAsync($"api/Individual/{Id}", Individual);
+ 
+        }
+    }
+
+
+
+
+    private void HandleReturn()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

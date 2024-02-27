@@ -1,33 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RIK_Proovitöö.Models;
-using System.Collections.Generic;
+
 
 public static class IndividualSeed
 {
     public static void Seed(ModelBuilder modelBuilder)
     {
-        var individuals = new List<Individual>
-        {
-            new Individual
-            {
-                Id = 1,
-                FirstName = "John",
-                LastName = "Doe",
-                PersonalCode = 123456,
-                PaymentType = PaymentType.Cash,
-                ExtraInfo = "Test extra info 1"
-            },
-            new Individual
-            {
-                Id = 2,
-                FirstName = "Jane",
-                LastName = "Doe",
-                PersonalCode = 654321,
-                PaymentType = PaymentType.BankTransfer,
-                ExtraInfo = "Test extra info 2"
-            },
+        var individuals = new List<Individual>();
+        var random = new Random();
 
-        };
+        for (int i = 1; i <= 50; i++)
+        {
+            individuals.Add(new Individual
+            {
+                ID = i,
+                FirstName = $"First{i}",
+                LastName = $"Last{i}",
+                PersonalCode = random.Next(100000, 999999),
+                PaymentType = (PaymentType)random.Next(0, 2),
+                ExtraInfo = $"Test extra info {i}"
+            });
+        }
 
         modelBuilder.Entity<Individual>().HasData(individuals);
     }
