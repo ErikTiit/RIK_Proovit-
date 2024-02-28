@@ -1,0 +1,12 @@
+﻿.navbar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.dark-footer {
+    background-color: #333; 
+    color: #fff; 
+}

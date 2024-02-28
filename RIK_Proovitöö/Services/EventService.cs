@@ -51,7 +51,12 @@ namespace RIK_Proovitöö.Services
 
         public async Task DeleteIndividualAttendeeAsync(int eventId, int individualId)
         {
-            await _http.DeleteAsync($"{_config["ApiEndpoints:EventIndividualDelete"]}/{eventId}/{individualId}");
+            var response = await _http.DeleteAsync($"{_config["ApiEndpoints:EventIndividualDelete"]}/{eventId}/{individualId}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Failed to delete individual attendee with status code: {response.StatusCode}");
+            }
         }
 
         public async Task DeleteCompanyAttendeeAsync(int eventId, int companyId)

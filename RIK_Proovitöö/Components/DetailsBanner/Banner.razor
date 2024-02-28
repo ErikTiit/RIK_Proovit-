@@ -1,0 +1,39 @@
+﻿@inject NavigationManager NavManager
+
+<div class="container mt-3">
+    <div>
+        <div class="row align-items-center" style="background-color:#0d6efd;">
+            <div class="col">
+                <h1 class="display-6" style="color:white">@PageTitle</h1>
+            </div>
+            <div class="col">
+                <div style="height: 100px; overflow: hidden;">
+                    <img src="/libled.jpg" class="float-end" alt="Banner Image">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    public string PageTitle { get; set; }
+
+    protected override void OnInitialized()
+    {
+        PageTitle = GetPageTitleFromUri(NavManager.Uri);
+    }
+
+    private string GetPageTitleFromUri(string uriString)
+    {
+        var uri = new Uri(uriString);
+        var page = uri.Segments.Length > 1 ? uri.Segments[1].TrimEnd('/') : "";
+
+        return page switch
+        {
+            "EventDetails" => "Osavõtjad",
+            "IndividualDetails" or "CompanyDetails" => "Osavõtja info",
+            "AddEvent" => "Ürituse lisamine",
+            _ => ""
+        };
+    }
+}

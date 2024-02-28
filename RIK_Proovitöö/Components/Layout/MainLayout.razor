@@ -1,22 +1,68 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="main">
-    <nav class="navbar">
-        <div class="container">
-            <div class="navbar-brand">
-                <a href="#">
-                    <img src="/logo.svg" alt="Logo" />
-                </a>
-            </div>
-            <div class="navbar-menu">
-                <div class="navbar-end">
-                    <a class="navbar-item" href="/">avaleht</a>
-                    <a class="navbar-item" href="/AddEvent">ürituselisamine</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <div class="container" style="background-color: white;">
+        <header class="d-flex justify-content-between py-3">
+            <img src="/logo.svg" alt="Logo" />
+            <ul class="nav nav-pills">
+                <li class="nav-item"><NavLink class="nav-link" href="/" Match="NavLinkMatch.All">Avaleht</NavLink></li>
+                <li class="nav-item"><NavLink class="nav-link" href="/AddEvent">Ürituse lisamine</NavLink></li>
+            </ul>
+        </header>
+    </div>
     <div class="content">
         @Body
+    </div>
+    <div class="container">
+        <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 my-5 border-top dark-footer justify-content-between">
+
+
+            <div class="col mb-3 text-start">
+                <h3>prim</h3>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2">Class aptent taciti sociosqu</li>
+                    <li class="nav-item mb-2">ad litora torquent per c</li>
+                    <li class="nav-item mb-2">psum primis in faucibus. </li>
+                    <li class="nav-item mb-2">ac ante ipsum pri</li>
+                    <li class="nav-item mb-2">sodales. Aenean quam tortor</li>
+                    <li class="nav-item mb-2">us felis posuere dui, sed v</li>
+                </ul>
+            </div>
+            <div class="col mb-3 text-start">
+                <h3>litor</h3>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2">Class aptent taciti sociosqu</li>
+                    <li class="nav-item mb-2">ad litora torquent per c</li>
+                    <li class="nav-item mb-2">psum primis in faucibus. </li>
+                    <li class="nav-item mb-2">ac ante ipsum pri</li>
+                    <li class="nav-item mb-2">sodales. Aenean quam tortor</li>
+                    <li class="nav-item mb-2">us felis posuere dui, sed v</li>
+                </ul>
+            </div>
+
+            <div class="col mb-3 text-start">
+                <h3>Kontakt</h3>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2">Ettevõtte nimi</li>
+                    <li class="nav-item mb-2">Tänav 123</li>
+                    <li class="nav-item mb-2">10100 Tallinn</li>
+                    <li class="nav-item mb-2">Eesti</li>
+                    <li class="nav-item mb-2">Telefon: +372 12345678</li>
+                    <li class="nav-item mb-2">E-post: info@ettevõte.ee</li>
+                </ul>
+            </div>
+            <div class="col mb-3 text-start">
+                
+                <ul class="nav flex-column mt-4">
+                    <li class="nav-item mb-2">Ettevõtte nimi2</li>
+                    <li class="nav-item mb-2">Tänav 1233</li>
+                    <li class="nav-item mb-2">10100 viljandi</li>
+                    <li class="nav-item mb-2">Eesti</li>
+                    <li class="nav-item mb-2">Telefon: +372 12312345678</li>
+                    <li class="nav-item mb-2">E-post: info@ettevõte.ee</li>
+                </ul>
+            </div>
+
+        </footer>
     </div>
 </div>

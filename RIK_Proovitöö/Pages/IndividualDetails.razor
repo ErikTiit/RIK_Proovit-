@@ -4,11 +4,12 @@
 @using Microsoft.AspNetCore.Components.Forms
 @using System.Net
 @using RIK_Proovitöö.Services
-@inject IIndividualService IndividualService
 @using RIK_Proovitöö.Components.EventDetailsComponents
+@inject IIndividualService IndividualService
+@using RIK_Proovitöö.Components.DetailsBanner
 @using static System.Net.WebRequestMethods
 
-
+<Banner/>
 
 @if (EditableIndividual == null)
 {
@@ -16,41 +17,53 @@
 }
 else
 {
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <EditForm Model="EditableIndividual" OnSubmit="HandleSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <h4 style="color:deepskyblue">Osavõtja info</h4>
+                    <div class="form-group row mb-3">
+                        <label for="firstName" class="col-sm-4 col-form-label">Eesnimi:</label>
+                        <div class="col-sm-8">
+                            <InputText class="form-control border" id="firstName" @bind-Value="EditableIndividual.FirstName" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label for="lastName" class="col-sm-4 col-form-label">Perenimi:</label>
+                        <div class="col-sm-8">
+                            <InputText class="form-control border" id="lastName" @bind-Value="EditableIndividual.LastName" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label for="personalCode" class="col-sm-4 col-form-label">Isikukood:</label>
+                        <div class="col-sm-8">
+                            <InputNumber class="form-control border" id="personalCode" @bind-Value="EditableIndividual.PersonalCode" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label for="paymentType" class="col-sm-4 col-form-label">Makseviis:</label>
+                        <div class="col-sm-8">
+                            <InputSelect class="form-control border" id="paymentType" @bind-Value="EditableIndividual.PaymentType">
+                                <option value="BankTransfer">Bank Transfer</option>
+                                <option value="Cash">Cash</option>
+                            </InputSelect>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label for="extraInfo" class="col-sm-4 col-form-label">Lisainfo:</label>
+                        <div class="col-sm-8">
+                            <InputTextArea class="form-control border" id="extraInfo" @bind-Value="EditableIndividual.ExtraInfo" rows="3" />
+                        </div>
+                    </div>
 
-    <EditForm Model="EditableIndividual" OnSubmit="HandleSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-
-        <div>
-            <label for="firstName">First Name:</label>
-            <InputText id="firstName" @bind-Value="EditableIndividual.FirstName" />
+                    <button type="button" class="btn btn-secondary" @onclick="HandleReturn">Tagasi</button>
+                    <button type="submit" class="btn btn-primary">Salvesta</button>
+                </EditForm>
+            </div>
         </div>
-        <div>
-            <label for="lastName">Last Name:</label>
-            <InputText id="lastName" @bind-Value="EditableIndividual.LastName" />
-        </div>
-        <div>
-            <label for="personalCode">Personal Code:</label>
-            <InputNumber id="personalCode" @bind-Value="EditableIndividual.PersonalCode" />
-        </div>
-        <div>
-            <label for="paymentType">Payment Type:</label>
-            <InputSelect id="paymentType" @bind-Value="EditableIndividual.PaymentType">
-                <option value="BankTransfer">Bank Transfer</option>
-                <option value="Cash">Cash</option>
-            </InputSelect>
-        </div>
-        <div>
-            <label for="extraInfo">Extra Info:</label>
-            <InputText id="extraInfo" @bind-Value="EditableIndividual.ExtraInfo" />
-        </div>
-
-        <button type="button" @onclick="HandleReturn">Return</button>
-        <button type="submit" >Save</button>
-
-
-
-    </EditForm>
+    </div>
 }
 
 

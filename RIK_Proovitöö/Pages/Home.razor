@@ -1,41 +1,72 @@
 ﻿@page "/"
 @using RIK_Proovitöö.Models
+@using RIK_Proovitöö.Components.Homepage
 @using RIK_Proovitöö.Services
 @inject IEventService EventService
 
-<h3>Events</h3>
+<HomeIntro/>
 
-<div class="row">
-    <div class="col-md-6">
-        <h4>Upcoming Events</h4>
-        @if (upcomingEvents == null)
-        {
-            <p><em>Loading...</em></p>
-        }
-        else
-        {
-            foreach (var evt in upcomingEvents)
-            {
-                <p>@evt.Name - @evt.Date.ToString("dd.MM.yyyy") - <a href="EventDetails/@evt.ID">Details</a> - <button @onclick="() => DeleteEvent(evt.ID)">Delete</button></p>
-            }
-        }
-    </div>
+<div class="container ">
+    <div class="row justify-content-center align-items-stretch mt-3 ">
+        <div class="col-md-6 text-center d-flex flex-column">
+            <div class="d-flex justify-content-center align-items-center vh-75 bg-primary text-white">
+                <h4>Tulevased üritused</h4>
+            </div>
+            <div class="bg-white flex-grow-1">
+                @if (upcomingEvents == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <ol>
+                        @foreach (var evt in upcomingEvents)
+                        {
+                            <li>
+                                <div class="row">
+                                    <div class="col-4 text-start">@evt.Name</div>
+                                    <div class="col-4 text-center">@evt.Date.ToString("dd.MM.yyyy")</div>
+                                    <div class="col-4 text-end">
+                                        <a href="EventDetails/@evt.ID" style="color: inherit; text-decoration: none;" class="pr-3">Osavõtjad</a>
+                                        <button class="btn-close" @onclick="() => DeleteEvent(evt.ID)"></button>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ol>
+                }
+            </div>
+        </div>
 
-    <div class="col-md-6">
-        <h4>Past Events</h4>
-        @if (pastEvents == null)
-        {
-            <p><em>Loading...</em></p>
-        }
-        else
-        {
-            foreach (var evt in pastEvents)
-            {
-                <p>@evt.Name - @evt.Date.ToString("dd.MM.yyyy") - <a href="EventDetails/@evt.ID">Details</a></p>
-            }
-        }
+        <div class="col-md-6 text-center d-flex flex-column">
+            <div class="d-flex justify-content-center align-items-center vh-75 bg-primary text-white">
+                <h4>Toimunud üritused </h4>
+            </div>
+            <div class="bg-white flex-grow-1">
+                @if (pastEvents == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <ol>
+                        @foreach (var evt in pastEvents)
+                        {
+                            <li>
+                                <div class="row">
+                                    <div class="col-4 text-start">@evt.Name</div>
+                                    <div class="col-4 text-center">@evt.Date.ToString("dd.MM.yyyy")</div>
+                                    <div class="col-4 text-end"><a href="EventDetails/@evt.ID" style="color: inherit; text-decoration: none;" class="pr-3">Osavõtjad</a></div>
+                                </div>
+                            </li>
+                        }
+                    </ol>
+                }
+            </div>
+        </div>
     </div>
 </div>
+
 
 @code {
     private Event[]? upcomingEvents;
