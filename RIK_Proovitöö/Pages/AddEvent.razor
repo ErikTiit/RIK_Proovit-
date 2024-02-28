@@ -3,7 +3,9 @@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Components.Forms
 @using System.Net.Http.Json
+@inject NavigationManager NavigationManager
 @inject HttpClient Http
+@inject IConfiguration Configuration
 
 <EditForm Model="newEvent" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -20,7 +22,7 @@
 
     <InputTextArea id="extrainfo" @bind-Value="newEvent.ExtraInfo" placeholder="Extra Info" />
     <br />
-
+    <button type="button" @onclick="HandleReturn">Return</button>
     <button type="submit">Create Event</button>
 </EditForm>
 
@@ -29,7 +31,11 @@
 
     private async Task HandleValidSubmit()
     {
-        await Http.PostAsJsonAsync("api/Events", newEvent);
+        await Http.PostAsJsonAsync(Configuration["ApiEndpoints:Events"], newEvent);
         newEvent = new Event();
+    }
+    private void HandleReturn()
+    {
+        NavigationManager.NavigateTo("/");
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RIK_Proovitöö.Models;
-
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RIK_Proovitöö.Controllers
 {
@@ -20,21 +22,39 @@ namespace RIK_Proovitöö.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Company>>> GetCompanies()
         {
-            return await _context.Companies.ToListAsync();
+            try
+            {
+                return await _context.Companies.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         // GET: api/Company/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Company>> GetCompany(int id)
         {
-            var company = await _context.Companies.FindAsync(id);
-
-            if (company == null)
+            try
             {
-                return NotFound();
-            }
+                var company = await _context.Companies.FindAsync(id);
 
-            return company;
+                if (company == null)
+                {
+                    return NotFound();
+                }
+
+                return company;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         // PUT: api/Company/5
@@ -47,7 +67,28 @@ namespace RIK_Proovitöö.Controllers
             }
 
             _context.Entry(company).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CompanyExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
 
             return NoContent();
         }
@@ -56,8 +97,17 @@ namespace RIK_Proovitöö.Controllers
         [HttpPost]
         public async Task<ActionResult<Company>> PostCompany(Company company)
         {
-            _context.Companies.Add(company);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Companies.Add(company);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
 
             return CreatedAtAction("GetCompany", new { id = company.ID }, company);
         }
@@ -66,16 +116,30 @@ namespace RIK_Proovitöö.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCompany(int id)
         {
-            var company = await _context.Companies.FindAsync(id);
-            if (company == null)
+            try
             {
-                return NotFound();
+                var company = await _context.Companies.FindAsync(id);
+                if (company == null)
+                {
+                    return NotFound();
+                }
+
+                _context.Companies.Remove(company);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
             }
 
-            _context.Companies.Remove(company);
-            await _context.SaveChangesAsync();
-
             return NoContent();
+        }
+
+        private bool CompanyExists(int id)
+        {
+            return _context.Companies.Any(e => e.ID == id);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace RIK_Proovitöö.Models
         [MaxLength(1000)]
         public string? ExtraInfo { get; set; }
 
-        public ICollection<EventIndividual> EventIndividuals { get; set; }
-        public ICollection<EventCompany> EventCompanies { get; set; }
+        public ICollection<EventIndividual>? EventIndividuals { get; set; }
+        public ICollection<EventCompany>? EventCompanies { get; set; }
     }
 }

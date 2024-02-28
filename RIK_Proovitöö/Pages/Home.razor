@@ -1,5 +1,7 @@
 ﻿@page "/"
-@inject HttpClient Http
+@using RIK_Proovitöö.Models
+@using RIK_Proovitöö.Services
+@inject IEventService EventService
 
 <h3>Events</h3>
 
@@ -14,7 +16,7 @@
         {
             foreach (var evt in upcomingEvents)
             {
-                <p>@evt.Name - @evt.Date - <a href="EventDetails/@evt.Id">Details</a></p>
+                <p>@evt.Name - @evt.Date.ToString("dd.MM.yyyy") - <a href="EventDetails/@evt.ID">Details</a> - <button @onclick="() => DeleteEvent(evt.ID)">Delete</button></p>
             }
         }
     </div>
@@ -29,29 +31,33 @@
         {
             foreach (var evt in pastEvents)
             {
-                <p>@evt.Name - @evt.Date - <a href="EventDetails/@evt.Id">Details</a></p>
+                <p>@evt.Name - @evt.Date.ToString("dd.MM.yyyy") - <a href="EventDetails/@evt.ID">Details</a></p>
             }
         }
     </div>
 </div>
 
 @code {
-    private Event[] upcomingEvents;
-    private Event[] pastEvents;
+    private Event[]? upcomingEvents;
+    private Event[]? pastEvents;
 
     protected override async Task OnInitializedAsync()
     {
-        var events = await Http.GetFromJsonAsync<Event[]>("/api/Events");
-        var currentDate = DateTime.Now;
-
-        upcomingEvents = events.Where(e => e.Date >= currentDate).ToArray();
-        pastEvents = events.Where(e => e.Date < currentDate).ToArray();
+        await LoadEvents();
     }
 
-    public class Event
+    private async Task LoadEvents()
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public DateTime Date { get; set; }
+        var events = await EventService.GetEventsAsync();
+        var currentDate = DateTime.Now;
+
+        upcomingEvents = events?.Where(e => e.Date >= currentDate).ToArray();
+        pastEvents = events?.Where(e => e.Date < currentDate).ToArray();
+    }
+
+    private async Task DeleteEvent(int id)
+    {
+        await EventService.DeleteEventAsync(id);
+        await LoadEvents();
     }
 }

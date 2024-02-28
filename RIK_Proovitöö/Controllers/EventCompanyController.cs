@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RIK_Proovitöö.Models;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace RIK_Proovitöö.Controllers
 {
@@ -21,32 +20,57 @@ namespace RIK_Proovitöö.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EventCompany>>> GetEventCompanies()
         {
-            return await _context.EventCompanies.ToListAsync();
+            try
+            {
+                return await _context.EventCompanies.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         // GET: api/EventCompany/Event/5
         [HttpGet("Event/{eventId}")]
         public async Task<ActionResult<IEnumerable<EventCompany>>> GetCompaniesForEvent(int eventId)
         {
-            return await _context.EventCompanies
-                .Where(ec => ec.EventID == eventId)
-                .ToListAsync();
+            try
+            {
+                return await _context.EventCompanies
+                    .Where(ec => ec.EventID == eventId)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
-
-
 
         // GET: api/EventCompany/5/1
         [HttpGet("{eventId}/{companyId}")]
         public async Task<ActionResult<EventCompany>> GetEventCompany(int eventId, int companyId)
         {
-            var eventCompany = await _context.EventCompanies.FindAsync(eventId, companyId);
-
-            if (eventCompany == null)
+            try
             {
-                return NotFound();
-            }
+                var eventCompany = await _context.EventCompanies.FindAsync(eventId, companyId);
 
-            return eventCompany;
+                if (eventCompany == null)
+                {
+                    return NotFound();
+                }
+
+                return eventCompany;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         // PUT: api/EventCompany/5/1
@@ -75,6 +99,12 @@ namespace RIK_Proovitöö.Controllers
                     throw;
                 }
             }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
 
             return NoContent();
         }
@@ -83,8 +113,17 @@ namespace RIK_Proovitöö.Controllers
         [HttpPost]
         public async Task<ActionResult<EventCompany>> PostEventCompany(EventCompany eventCompany)
         {
-            _context.EventCompanies.Add(eventCompany);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.EventCompanies.Add(eventCompany);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
 
             return CreatedAtAction("GetEventCompany", new { eventId = eventCompany.EventID, companyId = eventCompany.CompanyID }, eventCompany);
         }
@@ -93,14 +132,23 @@ namespace RIK_Proovitöö.Controllers
         [HttpDelete("{eventId}/{companyId}")]
         public async Task<IActionResult> DeleteEventCompany(int eventId, int companyId)
         {
-            var eventCompany = await _context.EventCompanies.FindAsync(eventId, companyId);
-            if (eventCompany == null)
+            try
             {
-                return NotFound();
-            }
+                var eventCompany = await _context.EventCompanies.FindAsync(eventId, companyId);
+                if (eventCompany == null)
+                {
+                    return NotFound();
+                }
 
-            _context.EventCompanies.Remove(eventCompany);
-            await _context.SaveChangesAsync();
+                _context.EventCompanies.Remove(eventCompany);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
 
             return NoContent();
         }

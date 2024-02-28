@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using RIK_Proovitöö.Models;
 
-
 namespace RIK_Proovitöö.Controllers
 {
     [Route("api/[controller]")]
@@ -20,33 +19,57 @@ namespace RIK_Proovitöö.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EventIndividual>>> GetEventIndividuals()
         {
-            return await _context.EventIndividuals.ToListAsync();
+            try
+            {
+                return await _context.EventIndividuals.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         // GET: api/EventIndividual/Event/5
         [HttpGet("Event/{eventId}")]
         public async Task<ActionResult<IEnumerable<EventIndividual>>> GetIndividualsForEvent(int eventId)
         {
-            return await _context.EventIndividuals
-                .Where(ei => ei.EventID == eventId)
-                .ToListAsync();
+            try
+            {
+                return await _context.EventIndividuals
+                    .Where(ei => ei.EventID == eventId)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
-
-
-
 
         // GET: api/EventIndividual/5/1
         [HttpGet("{eventId}/{individualId}")]
         public async Task<ActionResult<EventIndividual>> GetEventIndividual(int eventId, int individualId)
         {
-            var eventIndividual = await _context.EventIndividuals.FindAsync(eventId, individualId);
-
-            if (eventIndividual == null)
+            try
             {
-                return NotFound();
-            }
+                var eventIndividual = await _context.EventIndividuals.FindAsync(eventId, individualId);
 
-            return eventIndividual;
+                if (eventIndividual == null)
+                {
+                    return NotFound();
+                }
+
+                return eventIndividual;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         // PUT: api/EventIndividual/5/1
@@ -75,6 +98,12 @@ namespace RIK_Proovitöö.Controllers
                     throw;
                 }
             }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
 
             return NoContent();
         }
@@ -83,8 +112,17 @@ namespace RIK_Proovitöö.Controllers
         [HttpPost]
         public async Task<ActionResult<EventIndividual>> PostEventIndividual(EventIndividual eventIndividual)
         {
-            _context.EventIndividuals.Add(eventIndividual);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.EventIndividuals.Add(eventIndividual);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
 
             return CreatedAtAction("GetEventIndividual", new { eventId = eventIndividual.EventID, individualId = eventIndividual.IndividualID }, eventIndividual);
         }
@@ -93,14 +131,23 @@ namespace RIK_Proovitöö.Controllers
         [HttpDelete("{eventId}/{individualId}")]
         public async Task<IActionResult> DeleteEventIndividual(int eventId, int individualId)
         {
-            var eventIndividual = await _context.EventIndividuals.FindAsync(eventId, individualId);
-            if (eventIndividual == null)
+            try
             {
-                return NotFound();
-            }
+                var eventIndividual = await _context.EventIndividuals.FindAsync(eventId, individualId);
+                if (eventIndividual == null)
+                {
+                    return NotFound();
+                }
 
-            _context.EventIndividuals.Remove(eventIndividual);
-            await _context.SaveChangesAsync();
+                _context.EventIndividuals.Remove(eventIndividual);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
 
             return NoContent();
         }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RIK_Proovitöö.Models;
 
+
 namespace RIK_Proovitöö.Controllers
 {
     [Route("api/[controller]")]
@@ -19,21 +20,39 @@ namespace RIK_Proovitöö.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Individual>>> GetIndividuals()
         {
-            return await _context.Individuals.ToListAsync();
+            try
+            {
+                return await _context.Individuals.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         // GET: api/Individual/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Individual>> GetIndividual(int id)
         {
-            var individual = await _context.Individuals.FindAsync(id);
-
-            if (individual == null)
+            try
             {
-                return NotFound();
-            }
+                var individual = await _context.Individuals.FindAsync(id);
 
-            return individual;
+                if (individual == null)
+                {
+                    return NotFound();
+                }
+
+                return individual;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         // PUT: api/Individual/5
@@ -46,7 +65,28 @@ namespace RIK_Proovitöö.Controllers
             }
 
             _context.Entry(individual).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!IndividualExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
 
             return NoContent();
         }
@@ -55,8 +95,17 @@ namespace RIK_Proovitöö.Controllers
         [HttpPost]
         public async Task<ActionResult<Individual>> PostIndividual(Individual individual)
         {
-            _context.Individuals.Add(individual);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Individuals.Add(individual);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
 
             return CreatedAtAction("GetIndividual", new { id = individual.ID }, individual);
         }
@@ -65,16 +114,30 @@ namespace RIK_Proovitöö.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteIndividual(int id)
         {
-            var individual = await _context.Individuals.FindAsync(id);
-            if (individual == null)
+            try
             {
-                return NotFound();
+                var individual = await _context.Individuals.FindAsync(id);
+                if (individual == null)
+                {
+                    return NotFound();
+                }
+
+                _context.Individuals.Remove(individual);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
             }
 
-            _context.Individuals.Remove(individual);
-            await _context.SaveChangesAsync();
-
             return NoContent();
+        }
+
+        private bool IndividualExists(int id)
+        {
+            return _context.Individuals.Any(e => e.ID == id);
         }
     }
 }

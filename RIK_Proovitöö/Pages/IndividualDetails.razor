@@ -3,7 +3,8 @@
 @using RIK_Proovitöö.Models
 @using Microsoft.AspNetCore.Components.Forms
 @using System.Net
-@inject HttpClient Http
+@using RIK_Proovitöö.Services
+@inject IIndividualService IndividualService
 @using RIK_Proovitöö.Components.EventDetailsComponents
 @using static System.Net.WebRequestMethods
 
@@ -62,12 +63,11 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        if (Id != null)
+        if (Id != null && int.TryParse(Id, out var individualId))
         {
-            var response = await Http.GetFromJsonAsync<Individual>($"api/Individual/{Id}");
-            if (response != null)
+            Individual = await IndividualService.GetIndividualAsync(individualId);  
+            if (Individual != null)
             {
-                Individual = response;
                 EditableIndividual = new Individual
                     {
                         ID = Individual.ID,
@@ -81,24 +81,15 @@ else
         }
     }
 
-
-
-
     protected async Task HandleSubmit()
     {
-        
         if (Id != null && EditableIndividual != null)
         {
-            
             Individual = EditableIndividual;
             Individual.ID = int.Parse(Id);
-            var response = await Http.PutAsJsonAsync($"api/Individual/{Id}", Individual);
- 
+            await IndividualService.UpdateIndividualAsync(Individual.ID, Individual);  
         }
     }
-
-
-
 
     private void HandleReturn()
     {

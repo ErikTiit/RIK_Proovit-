@@ -1,7 +1,9 @@
 ﻿@page "/CompanyDetails/{Id}"
-@inject HttpClient Http
+@using RIK_Proovitöö.Services
+@inject ICompanyService CompanyService
 @using RIK_Proovitöö.Models
 @using Microsoft.AspNetCore.Components.Forms
+
 
 @if (EditableCompany == null)
 {
@@ -46,17 +48,20 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Company = await Http.GetFromJsonAsync<Company>($"api/Company/{Id}");
-        if (Company != null)
+        if (int.TryParse(Id, out var companyId))
         {
-            EditableCompany = new Company
-                {
-                    ID = Company.ID,
-                    CompanyName = Company.CompanyName,
-                    RegistryCode = Company.RegistryCode,
-                    PaymentType = Company.PaymentType,
-                    ExtraInfo = Company.ExtraInfo
-                };
+            Company = await CompanyService.GetCompanyAsync(companyId);  
+            if (Company != null)
+            {
+                EditableCompany = new Company
+                    {
+                        ID = Company.ID,
+                        CompanyName = Company.CompanyName,
+                        RegistryCode = Company.RegistryCode,
+                        PaymentType = Company.PaymentType,
+                        ExtraInfo = Company.ExtraInfo
+                    };
+            }
         }
     }
 
@@ -66,8 +71,7 @@ else
         {
             Company = EditableCompany;
             Company.ID = int.Parse(Id);
-            var response = await Http.PutAsJsonAsync($"api/Company/{Id}", Company);
+            await CompanyService.UpdateCompanyAsync(Company.ID, Company);  
         }
     }
-
 }

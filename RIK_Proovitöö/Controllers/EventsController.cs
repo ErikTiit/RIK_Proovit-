@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RIK_Proovitöö.Models;
 
+
 namespace RIK_Proovitöö.Controllers
 {
     [Route("api/[controller]")]
@@ -19,21 +20,39 @@ namespace RIK_Proovitöö.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Event>>> GetEvents()
         {
-            return await _context.Events.ToListAsync();
+            try
+            {
+                return await _context.Events.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         // GET: api/Events/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Event>> GetEvent(int id)
         {
-            var eventItem = await _context.Events.FindAsync(id);
-
-            if (eventItem == null)
+            try
             {
-                return NotFound();
-            }
+                var eventItem = await _context.Events.FindAsync(id);
 
-            return eventItem;
+                if (eventItem == null)
+                {
+                    return NotFound();
+                }
+
+                return eventItem;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         // PUT: api/Events/5
@@ -46,7 +65,28 @@ namespace RIK_Proovitöö.Controllers
             }
 
             _context.Entry(eventItem).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!EventExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
 
             return NoContent();
         }
@@ -60,27 +100,49 @@ namespace RIK_Proovitöö.Controllers
                 return BadRequest("The event date must be in the future.");
             }
 
-            _context.Events.Add(eventItem);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Events.Add(eventItem);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
 
             return CreatedAtAction("GetEvent", new { id = eventItem.ID }, eventItem);
         }
-
 
         // DELETE: api/Events/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEvent(int id)
         {
-            var eventItem = await _context.Events.FindAsync(id);
-            if (eventItem == null)
+            try
             {
-                return NotFound();
+                var eventItem = await _context.Events.FindAsync(id);
+                if (eventItem == null)
+                {
+                    return NotFound();
+                }
+
+                _context.Events.Remove(eventItem);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
             }
 
-            _context.Events.Remove(eventItem);
-            await _context.SaveChangesAsync();
-
             return NoContent();
+        }
+
+        private bool EventExists(int id)
+        {
+            return _context.Events.Any(e => e.ID == id);
         }
     }
 }
