@@ -1,8 +1,6 @@
 ﻿using RIK_Proovitöö.Models;
 
-
 namespace RIK_Proovitöö.Services
-
 {
     public interface IEventService
     {
@@ -15,6 +13,10 @@ namespace RIK_Proovitöö.Services
         Task<Company> GetCompanyAsync(int companyId);
         Task DeleteIndividualAttendeeAsync(int eventId, int individualId);
         Task DeleteCompanyAttendeeAsync(int eventId, int companyId);
+        Task<HttpResponseMessage> CreateIndividualAsync(Individual newIndividual);
+        Task<HttpResponseMessage> CreateCompanyAsync(Company newCompany);
+        Task<HttpResponseMessage> CreateEventIndividualAsync(EventIndividual eventIndividual);
+        Task<HttpResponseMessage> CreateEventCompanyAsync(EventCompany eventCompany);
     }
-
 }
+

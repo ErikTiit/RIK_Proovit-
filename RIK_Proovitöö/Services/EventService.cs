@@ -51,7 +51,8 @@ namespace RIK_Proovitöö.Services
 
         public async Task DeleteIndividualAttendeeAsync(int eventId, int individualId)
         {
-            var response = await _http.DeleteAsync($"{_config["ApiEndpoints:EventIndividualDelete"]}/{eventId}/{individualId}");
+            var url = $"{_config["ApiEndpoints:DeletingIndividual"]}/{eventId}/{individualId}";
+            var response = await _http.DeleteAsync(url);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -61,7 +62,34 @@ namespace RIK_Proovitöö.Services
 
         public async Task DeleteCompanyAttendeeAsync(int eventId, int companyId)
         {
-            await _http.DeleteAsync($"{_config["ApiEndpoints:EventCompany"]}/{eventId}/{companyId}");
+            var url = $"{_config["ApiEndpoints:DeletingCompany"]}/{eventId}/{companyId}";
+            await _http.DeleteAsync(url);
         }
+
+        public Task<HttpResponseMessage> CreateIndividualAsync(Individual newIndividual)
+        {
+            var url = _config["ApiEndpoints:Individual"];
+            return _http.PostAsJsonAsync(url, newIndividual);
+        }
+
+        public Task<HttpResponseMessage> CreateCompanyAsync(Company newCompany)
+        {
+            var url = _config["ApiEndpoints:Company"];
+            return _http.PostAsJsonAsync(url, newCompany);
+        }
+
+        public Task<HttpResponseMessage> CreateEventIndividualAsync(EventIndividual eventIndividual)
+        {
+            var url = _config["ApiEndpoints:AddingIndividual"];
+            return _http.PostAsJsonAsync(url, eventIndividual);
+        }
+
+        public Task<HttpResponseMessage> CreateEventCompanyAsync(EventCompany eventCompany)
+        {
+            var url = _config["ApiEndpoints:AddingCompany"];
+            return _http.PostAsJsonAsync(url, eventCompany);
+        }
+
+
     }
 }

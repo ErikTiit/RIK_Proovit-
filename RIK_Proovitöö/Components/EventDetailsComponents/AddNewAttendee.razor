@@ -1,7 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
 @using RIK_Proovitöö.Models
+@using RIK_Proovitöö.Services
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
+@inject IEventService EventService
 
 <div class="justify-content-center">
     <div class="container">
@@ -23,7 +25,6 @@
                             <EditForm Model="newIndividual" OnValidSubmit="HandleValidSubmitIndividual">
                                 <DataAnnotationsValidator />
                                 <ValidationSummary />
-                                <h4 style="color:deepskyblue">Add New Individual</h4>
                                 <div class="form-group row mb-3">
                                     <label for="firstName" class="col-sm-4 col-form-label">Eesnimi:</label>
                                     <div class="col-sm-8">
@@ -75,7 +76,6 @@
                             <EditForm Model="newCompany" OnValidSubmit="HandleValidSubmitCompany">
                                 <DataAnnotationsValidator />
                                 <ValidationSummary />
-                                <h4 style="color:deepskyblue">Add New Company</h4>
                                 <div class="form-group row mb-3">
                                     <label for="CompanyName" class="col-sm-4 col-form-label">Ettevõtte nimi:</label>
                                     <div class="col-sm-8">
@@ -129,15 +129,14 @@
 
     private async Task HandleValidSubmitIndividual()
     {
-        var createdIndividual = await Http.PostAsJsonAsync("/api/Individual", newIndividual);
+        var createdIndividual = await EventService.CreateIndividualAsync(newIndividual);
         if (createdIndividual.IsSuccessStatusCode)
         {
             var individual = await createdIndividual.Content.ReadFromJsonAsync<Individual>();
             if (EventDetails != null && individual != null)
             {
-                
                 var eventIndividual = new EventIndividual { EventID = EventDetails.ID, IndividualID = individual.ID };
-                var createdEventIndividual = await Http.PostAsJsonAsync("/api/EventIndividual", eventIndividual);
+                var createdEventIndividual = await EventService.CreateEventIndividualAsync(eventIndividual);
                 if (createdEventIndividual.IsSuccessStatusCode)
                 {
                     await OnAttendeeAdded.InvokeAsync(null);
@@ -148,15 +147,14 @@
 
     private async Task HandleValidSubmitCompany()
     {
-        var createdCompany = await Http.PostAsJsonAsync("/api/Company", newCompany);
+        var createdCompany = await EventService.CreateCompanyAsync(newCompany);
         if (createdCompany.IsSuccessStatusCode)
         {
             var company = await createdCompany.Content.ReadFromJsonAsync<Company>();
             if (EventDetails != null && company != null)
             {
-                
                 var eventCompany = new EventCompany { EventID = EventDetails.ID, CompanyID = company.ID };
-                var createdEventCompany = await Http.PostAsJsonAsync("/api/EventCompany", eventCompany);
+                var createdEventCompany = await EventService.CreateEventCompanyAsync(eventCompany);
                 if (createdEventCompany.IsSuccessStatusCode)
                 {
                     await OnAttendeeAdded.InvokeAsync(null);
@@ -164,6 +162,7 @@
             }
         }
     }
+
 
     private void HandleReturn()
     {
