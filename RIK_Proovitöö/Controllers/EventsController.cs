@@ -1,148 +1,134 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RIK_Proovitöö.Models;
+using RIK_Proovitöö.Repository;
 
-
-namespace RIK_Proovitöö.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class EventsController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class EventsController : ControllerBase
+    private readonly IEventRepository _eventRepository;
+
+    public EventsController(IEventRepository eventRepository)
     {
-        private readonly AppDbContext _context;
+        _eventRepository = eventRepository;
+    }
 
-        public EventsController(AppDbContext context)
+    // GET: api/Events
+    [HttpGet]
+    public async Task<IActionResult> GetEvents()
+    {
+        try
         {
-            _context = context;
+            var events = await _eventRepository.GetEvents();
+            return new OkObjectResult(events);
+        }
+        catch (Exception ex)
+        {
+            // Log the exception message
+            Console.WriteLine(ex.Message);
+            return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
+        }
+    }
+
+    // GET: api/Events/5
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetEvent(int id)
+    {
+        try
+        {
+            var eventItem = await _eventRepository.GetEvent(id);
+
+            if (eventItem == null)
+            {
+                return new NotFoundObjectResult(new { message = "Event not found" });
+            }
+
+            return new OkObjectResult(eventItem);
+        }
+        catch (Exception ex)
+        {
+            // Log the exception message
+            Console.WriteLine(ex.Message);
+            return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
+        }
+    }
+
+    // PUT: api/Events/5
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutEvent(int id, Event eventItem)
+    {
+        if (id != eventItem.ID)
+        {
+            return new BadRequestObjectResult(new { message = "Invalid request" });
         }
 
-        // GET: api/Events
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Event>>> GetEvents()
+        try
         {
-            try
+            await _eventRepository.UpdateEvent(eventItem);
+            return Ok();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await _eventRepository.EventExists(id))
             {
-                return await _context.Events.ToListAsync();
+                return new NotFoundObjectResult(new { message = "Event not found" });
             }
-            catch (Exception ex)
+            else
             {
-                // Log the exception message
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
+                throw;
             }
         }
-
-        // GET: api/Events/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Event>> GetEvent(int id)
+        catch (Exception ex)
         {
-            try
-            {
-                var eventItem = await _context.Events.FindAsync(id);
+            // Log the exception message
+            Console.WriteLine(ex.Message);
+            return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
+        }
+    }
 
-                if (eventItem == null)
-                {
-                    return NotFound();
-                }
-
-                return eventItem;
-            }
-            catch (Exception ex)
-            {
-                // Log the exception message
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
-            }
+    // POST: api/Events
+    [HttpPost]
+    public async Task<IActionResult> PostEvent(Event eventItem)
+    {
+        if (eventItem.Date <= DateTime.Now)
+        {
+            return new BadRequestObjectResult(new { message = "The event date must be in the future." });
         }
 
-        // PUT: api/Events/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEvent(int id, Event eventItem)
+        try
         {
-            if (id != eventItem.ID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(eventItem).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EventExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log the exception message
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
-            }
-
-            return NoContent();
+            await _eventRepository.AddEvent(eventItem);
+            return new CreatedAtActionResult("GetEvent", "Events", new { id = eventItem.ID }, eventItem);
         }
-
-        // POST: api/Events
-        [HttpPost]
-        public async Task<ActionResult<Event>> PostEvent(Event eventItem)
+        catch (Exception ex)
         {
-            if (eventItem.Date <= DateTime.Now)
-            {
-                return BadRequest("The event date must be in the future.");
-            }
-
-            try
-            {
-                _context.Events.Add(eventItem);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                // Log the exception message
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
-            }
-
-            return CreatedAtAction("GetEvent", new { id = eventItem.ID }, eventItem);
+            // Log the exception message
+            Console.WriteLine(ex.Message);
+            return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
         }
+    }
 
-        // DELETE: api/Events/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEvent(int id)
+    // DELETE: api/Events/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteEvent(int id)
+    {
+        try
         {
-            try
+            var eventItem = await _eventRepository.GetEvent(id);
+            if (eventItem == null)
             {
-                var eventItem = await _context.Events.FindAsync(id);
-                if (eventItem == null)
-                {
-                    return NotFound();
-                }
-
-                _context.Events.Remove(eventItem);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                // Log the exception message
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
+                return new NotFoundObjectResult(new { message = "Event not found" });
             }
 
-            return NoContent();
+            await _eventRepository.DeleteEvent(id);
+            return Ok();
         }
-
-        private bool EventExists(int id)
+        catch (Exception ex)
         {
-            return _context.Events.Any(e => e.ID == id);
+            // Log the exception message
+            Console.WriteLine(ex.Message);
+            return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
         }
     }
 }

@@ -25,41 +25,47 @@
                             <EditForm Model="newIndividual" OnValidSubmit="HandleValidSubmitIndividual">
                                 <DataAnnotationsValidator />
                                 <ValidationSummary />
-                                <div class="form-group row mb-3">
-                                    <label for="firstName" class="col-sm-4 col-form-label">Eesnimi:</label>
-                                    <div class="col-sm-8">
-                                        <InputText class="form-control border" id="firstName" @bind-Value="newIndividual.FirstName" />
-                                    </div>
-                                </div>
-                                <div class="form-group row mb-3">
-                                    <label for="lastName" class="col-sm-4 col-form-label">Perenimi:</label>
-                                    <div class="col-sm-8">
-                                        <InputText class="form-control border" id="lastName" @bind-Value="newIndividual.LastName" />
-                                    </div>
-                                </div>
-                                <div class="form-group row mb-3">
-                                    <label for="personalCode" class="col-sm-4 col-form-label">Isikukood:</label>
-                                    <div class="col-sm-8">
-                                <InputNumber class="form-control border" maxlength="11" id="personalCode" @bind-Value="newIndividual.PersonalCode" />
-                                    </div>
-                                </div>
-                                <div class="form-group row mb-3">
-                                    <label for="paymentType" class="col-sm-4 col-form-label">Makseviis:</label>
-                                    <div class="col-sm-8">
-                                        <InputSelect class="form-control border" id="paymentType" @bind-Value="newIndividual.PaymentType">
-                                                @foreach (var paymentType in Enum.GetValues<PaymentType>())
-                                                {
-                                                <option value="@paymentType">@paymentType</option>
-                                                }
-                                        </InputSelect>
-                                    </div>
-                                </div>
-                                <div class="form-group row mb-3">
-                                    <label for="extraInfo" class="col-sm-4 col-form-label">Lisainfo:</label>
-                                    <div class="col-sm-8">
-                                        <InputTextArea class="form-control border" id="extraInfo" @bind-Value="newIndividual.ExtraInfo" rows="3" />
-                                    </div>
-                                </div>
+                        <div class="form-group row mb-3">
+                            <label for="firstName" class="col-sm-4 col-form-label">Eesnimi:</label>
+                            <div class="col-sm-8">
+                                <InputText class="form-control border" id="firstName" @bind-Value="newIndividual.FirstName" />
+                                <ValidationMessage For="@(() => newIndividual.FirstName)" />
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <label for="lastName" class="col-sm-4 col-form-label">Perenimi:</label>
+                            <div class="col-sm-8">
+                                <InputText class="form-control border" id="lastName" @bind-Value="newIndividual.LastName" />
+                                <ValidationMessage For="@(() => newIndividual.LastName)" />
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <label for="personalCode" class="col-sm-4 col-form-label">Isikukood:</label>
+                            <div class="col-sm-8">
+                                <InputNumber class="form-control border" id="personalCode" @bind-Value="newIndividual.PersonalCode" />
+                                <ValidationMessage For="@(() => newIndividual.PersonalCode)" />
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <label for="paymentType" class="col-sm-4 col-form-label">Makseviis:</label>
+                            <div class="col-sm-8">
+                                <InputSelect class="form-control border" id="paymentType" @bind-Value="newIndividual.PaymentType">
+                                    @foreach (var paymentType in Enum.GetValues<PaymentType>())
+                                    {
+                                        <option value="@paymentType">@paymentType</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => newIndividual.PaymentType)" />
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <label for="extraInfo" class="col-sm-4 col-form-label">Lisainfo:</label>
+                            <div class="col-sm-8">
+                                <InputTextArea class="form-control border" id="extraInfo" @bind-Value="newIndividual.ExtraInfo" rows="3" />
+                                <ValidationMessage For="@(() => newIndividual.ExtraInfo)" />
+                            </div>
+                        </div>
+
 
                                 <button type="button" class="btn btn-secondary" @onclick="HandleReturn">Tagasi</button>
                                 <button type="submit" class="btn btn-primary">Salvesta</button>
@@ -76,35 +82,48 @@
                             <EditForm Model="newCompany" OnValidSubmit="HandleValidSubmitCompany">
                                 <DataAnnotationsValidator />
                                 <ValidationSummary />
-                                <div class="form-group row mb-3">
-                                    <label for="CompanyName" class="col-sm-4 col-form-label">Ettevõtte nimi:</label>
-                                    <div class="col-sm-8">
-                                        <InputText class="form-control border" id="CompanyName" @bind-Value="newCompany.CompanyName" />
-                                    </div>
-                                </div>
-                                <div class="form-group row mb-3">
-                                    <label for="RegistryCode" class="col-sm-4 col-form-label">Registrikood:</label>
-                                    <div class="col-sm-8">
-                                <InputNumber class="form-control border" maxlength="11" id="RegistryCode" @bind-Value="newCompany.RegistryCode" />
-                                    </div>
-                                </div>
-                                <div class="form-group row mb-3">
-                                    <label for="paymentType" class="col-sm-4 col-form-label">Makseviis:</label>
-                                    <div class="col-sm-8">
-                                        <InputSelect class="form-control border" id="paymentType" @bind-Value="newCompany.PaymentType">
-                                                @foreach (var paymentType in Enum.GetValues<PaymentType>())
-                                                {
-                                                <option value="@paymentType">@paymentType</option>
-                                                }
-                                        </InputSelect>
-                                    </div>
-                                </div>
-                                <div class="form-group row mb-3">
-                                    <label for="extraInfo" class="col-sm-4 col-form-label">Lisainfo:</label>
-                                    <div class="col-sm-8">
-                                        <InputTextArea class="form-control border" id="extraInfo" @bind-Value="newCompany.ExtraInfo" rows="3" />
-                                    </div>
-                                </div>
+                        <div class="form-group row mb-3">
+                            <label for="CompanyName" class="col-sm-4 col-form-label">Ettevõtte nimi:</label>
+                            <div class="col-sm-8">
+                                <InputText class="form-control border" id="CompanyName" @bind-Value="newCompany.CompanyName" />
+                                <ValidationMessage For="@(() => newCompany.CompanyName)" />
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <label for="RegistryCode" class="col-sm-4 col-form-label">Registrikood:</label>
+                            <div class="col-sm-8">
+                                <InputNumber class="form-control border" id="RegistryCode" @bind-Value="newCompany.RegistryCode" />
+                                <ValidationMessage For="@(() => newCompany.RegistryCode)" />
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <label for="CompanyAttendeeAmount" class="col-sm-4 col-form-label">Osavõtjate arv:</label>
+                            <div class="col-sm-8">
+                                <InputNumber class="form-control border" id="CompanyAttendeeAmount" @bind-Value="newCompany.CompanyAttendeeAmount" />
+                                <ValidationMessage For="@(() => newCompany.CompanyAttendeeAmount)" />
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <label for="paymentType" class="col-sm-4 col-form-label">Makseviis:</label>
+                            <div class="col-sm-8">
+                                <InputSelect class="form-control border" id="paymentType" @bind-Value="newCompany.PaymentType">
+                                    @foreach (var paymentType in Enum.GetValues<PaymentType>())
+                                    {
+                                        <option value="@paymentType">@paymentType</option>
+                                    }
+                                </InputSelect>
+                                <ValidationMessage For="@(() => newCompany.PaymentType)" />
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <label for="extraInfo" class="col-sm-4 col-form-label">Lisainfo:</label>
+                            <div class="col-sm-8">
+                                <InputTextArea class="form-control border" id="extraInfo" @bind-Value="newCompany.ExtraInfo" rows="3" />
+                                <ValidationMessage For="@(() => newCompany.ExtraInfo)" />
+                            </div>
+                        </div>
+
+
 
                                 <button type="button" class="btn btn-secondary" @onclick="HandleReturn">Tagasi</button>
                                 <button type="submit" class="btn btn-primary">Salvesta</button>

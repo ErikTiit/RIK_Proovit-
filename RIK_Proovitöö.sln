@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RIK_Proovitöö", "RIK_Proovitöö\RIK_Proovitöö.csproj", "{A5D38D10-8D73-4474-8652-B5CF4B50897E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RIK_Proovitöö_TESTING", "RIK_Proovitöö_TESTING\RIK_Proovitöö_TESTING.csproj", "{17A86B59-4630-403E-B683-D24FE620AD09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A5D38D10-8D73-4474-8652-B5CF4B50897E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5D38D10-8D73-4474-8652-B5CF4B50897E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5D38D10-8D73-4474-8652-B5CF4B50897E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17A86B59-4630-403E-B683-D24FE620AD09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17A86B59-4630-403E-B683-D24FE620AD09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17A86B59-4630-403E-B683-D24FE620AD09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17A86B59-4630-403E-B683-D24FE620AD09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

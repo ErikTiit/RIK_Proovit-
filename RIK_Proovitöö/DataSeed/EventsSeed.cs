@@ -9,7 +9,7 @@ public static class EventSeed
         var events = new List<Event>();
         var random = new Random();
 
-        for (int i = 1; i <= 50; i++)
+        for (int i = 1; i <= 10; i++)
         {
             events.Add(new Event
             {
@@ -23,3 +23,4 @@ public static class EventSeed
         modelBuilder.Entity<Event>().HasData(events);
     }
 }
+

@@ -21,24 +21,28 @@
                     <label for="name" class="col-sm-4 col-form-label">Ürituse nimi:</label>
                     <div class="col-sm-8">
                         <InputText class="form-control border" id="name" @bind-Value="newEvent.Name" />
+                        <ValidationMessage For="@(() => newEvent.Name)" />
                     </div>
                 </div>
                 <div class="form-group row mb-3">
                     <label for="date" class="col-sm-4 col-form-label">Toimumisaeg:</label>
                     <div class="col-sm-8">
                         <InputDate class="form-control border" id="date" placeholder="pp.kk.aaaa" @bind-Value="newEvent.Date" Min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        <ValidationMessage For="@(() => newEvent.Date)" />
                     </div>
                 </div>
                 <div class="form-group row mb-3">
                     <label for="location" class="col-sm-4 col-form-label">Asukoht:</label>
                     <div class="col-sm-8">
                         <InputText class="form-control border" id="location" @bind-Value="newEvent.Location" />
+                        <ValidationMessage For="@(() => newEvent.Location)" />
                     </div>
                 </div>
                 <div class="form-group row mb-3">
                     <label for="extrainfo" class="col-sm-4 col-form-label">Lisainfo:</label>
                     <div class="col-sm-8">
                         <InputTextArea class="form-control border" id="extrainfo" @bind-Value="newEvent.ExtraInfo" rows="3" />
+                        <ValidationMessage For="@(() => newEvent.ExtraInfo)" />
                     </div>
                 </div>
 
@@ -57,6 +61,7 @@
     {
         await Http.PostAsJsonAsync(Configuration["ApiEndpoints:Events"], newEvent);
         newEvent = new Event();
+        NavigationManager.NavigateTo("/");
     }
     private void HandleReturn()
     {

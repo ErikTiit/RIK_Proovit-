@@ -25,27 +25,40 @@ else
                         <label for="companyName" class="col-sm-4 col-form-label">Ettevõtte nimi:</label>
                         <div class="col-sm-8">
                             <InputText class="form-control border" id="companyName" @bind-Value="EditableCompany.CompanyName" />
+                            <ValidationMessage For="@(() => EditableCompany.CompanyName)" />
                         </div>
                     </div>
                     <div class="form-group row mb-3">
                         <label for="registryCode" class="col-sm-4 col-form-label">Registrikood:</label>
                         <div class="col-sm-8">
-                            <InputNumber class="form-control border" id="registryCode" @bind-Value="EditableCompany.RegistryCode" />
+                            <InputNumber class="form-control border" id="RegistryCode" @bind-Value="EditableCompany.RegistryCode" />
+                            <ValidationMessage For="@(() => EditableCompany.RegistryCode)" />
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row mb-3">
+                        <label for="CompanyAttendeeAmount" class="col-sm-4 col-form-label">Osavõtjate arv:</label>
+                        <div class="col-sm-8">
+                            <InputNumber class="form-control border" id="CompanyAttendeeAmount" @bind-Value="EditableCompany.CompanyAttendeeAmount" />
+                            <ValidationMessage For="@(() => EditableCompany.CompanyAttendeeAmount)" />
                         </div>
                     </div>
                     <div class="form-group row mb-3">
                         <label for="paymentType" class="col-sm-4 col-form-label">Makseviis:</label>
                         <div class="col-sm-8">
                             <InputSelect class="form-control border" id="paymentType" @bind-Value="EditableCompany.PaymentType">
-                                <option value="BankTransfer">Bank Transfer</option>
-                                <option value="Cash">Cash</option>
+                                <option value="Pangaülekanne">Pangaülekanne</option>
+                                <option value="Sularaha">Sularaha</option>
                             </InputSelect>
+                            <ValidationMessage For="@(() => EditableCompany.PaymentType)" />
                         </div>
                     </div>
                     <div class="form-group row mb-3">
-                        <label for="extraInfo" class="col-sm-4 col-form-label">Lisainfo</label>
+                        <label for="extraInfo" class="col-sm-4 col-form-label">Lisainfo:</label>
                         <div class="col-sm-8">
                             <InputTextArea class="form-control border" id="extraInfo" @bind-Value="EditableCompany.ExtraInfo" rows="3" />
+                            <ValidationMessage For="@(() => EditableCompany.ExtraInfo)" />
                         </div>
                     </div>
                     <button type="button" class="btn btn-secondary" @onclick="HandleReturn">Tagasi</button>
@@ -78,6 +91,7 @@ else
                     {
                         ID = Company.ID,
                         CompanyName = Company.CompanyName,
+                        CompanyAttendeeAmount = Company.CompanyAttendeeAmount,
                         RegistryCode = Company.RegistryCode,
                         PaymentType = Company.PaymentType,
                         ExtraInfo = Company.ExtraInfo
@@ -92,7 +106,8 @@ else
         {
             Company = EditableCompany;
             Company.ID = int.Parse(Id);
-            await CompanyService.UpdateCompanyAsync(Company.ID, Company);  
+            await CompanyService.UpdateCompanyAsync(Company.ID, Company); 
+            NavigationManager.NavigateTo("/");
         }
     }
     private void HandleReturn()

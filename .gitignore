@@ -9,7 +9,9 @@
 *.user
 *.userosscache
 *.sln.docstates
-/migrations/
+/Migrations/
+TestResults
+.github
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)

@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RIK_Proovitöö.Models;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using RIK_Proovitöö.Repository;
 
 namespace RIK_Proovitöö.Controllers
 {
@@ -11,49 +9,50 @@ namespace RIK_Proovitöö.Controllers
     [ApiController]
     public class CompanyController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ICompanyRepository _companyRepository;
 
-        public CompanyController(AppDbContext context)
+        public CompanyController(ICompanyRepository companyRepository)
         {
-            _context = context;
+            _companyRepository = companyRepository;
         }
 
         // GET: api/Company
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Company>>> GetCompanies()
+        public async Task<IActionResult> GetCompanies()
         {
             try
             {
-                return await _context.Companies.ToListAsync();
+                var companies = await _companyRepository.GetCompanies();
+                return new OkObjectResult(companies);
             }
             catch (Exception ex)
             {
                 // Log the exception message
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
+                return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
             }
         }
 
         // GET: api/Company/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Company>> GetCompany(int id)
+        public async Task<IActionResult> GetCompany(int id)
         {
             try
             {
-                var company = await _context.Companies.FindAsync(id);
+                var company = await _companyRepository.GetCompany(id);
 
                 if (company == null)
                 {
-                    return NotFound();
+                    return new NotFoundObjectResult(new { message = "Company not found" });
                 }
 
-                return company;
+                return new OkObjectResult(company);
             }
             catch (Exception ex)
             {
                 // Log the exception message
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
+                return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
             }
         }
 
@@ -63,20 +62,19 @@ namespace RIK_Proovitöö.Controllers
         {
             if (id != company.ID)
             {
-                return BadRequest();
+                return new BadRequestObjectResult(new { message = "Invalid request" });
             }
-
-            _context.Entry(company).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _companyRepository.UpdateCompany(company);
+                return Ok();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CompanyExists(id))
+                if (!await _companyRepository.CompanyExists(id))
                 {
-                    return NotFound();
+                    return new NotFoundObjectResult(new { message = "Company not found" });
                 }
                 else
                 {
@@ -87,29 +85,25 @@ namespace RIK_Proovitöö.Controllers
             {
                 // Log the exception message
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
+                return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
             }
-
-            return NoContent();
         }
 
         // POST: api/Company
         [HttpPost]
-        public async Task<ActionResult<Company>> PostCompany(Company company)
+        public async Task<IActionResult> PostCompany(Company company)
         {
             try
             {
-                _context.Companies.Add(company);
-                await _context.SaveChangesAsync();
+                await _companyRepository.AddCompany(company);
+                return new CreatedAtActionResult("GetCompany", "Company", new { id = company.ID }, company);
             }
             catch (Exception ex)
             {
                 // Log the exception message
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
+                return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
             }
-
-            return CreatedAtAction("GetCompany", new { id = company.ID }, company);
         }
 
         // DELETE: api/Company/5
@@ -118,28 +112,20 @@ namespace RIK_Proovitöö.Controllers
         {
             try
             {
-                var company = await _context.Companies.FindAsync(id);
-                if (company == null)
+                if (!await _companyRepository.CompanyExists(id))
                 {
-                    return NotFound();
+                    return new NotFoundObjectResult(new { message = "Company not found" });
                 }
 
-                _context.Companies.Remove(company);
-                await _context.SaveChangesAsync();
+                await _companyRepository.DeleteCompany(id);
+                return Ok();
             }
             catch (Exception ex)
             {
                 // Log the exception message
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
+                return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
             }
-
-            return NoContent();
-        }
-
-        private bool CompanyExists(int id)
-        {
-            return _context.Companies.Any(e => e.ID == id);
         }
     }
 }

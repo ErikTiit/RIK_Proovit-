@@ -1,160 +1,146 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RIK_Proovitöö.Models;
+using RIK_Proovitöö.Repository;
 
-namespace RIK_Proovitöö.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class EventIndividualController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class EventIndividualController : ControllerBase
+    private readonly IEventIndividualRepository _eventIndividualRepository;
+
+    public EventIndividualController(IEventIndividualRepository eventIndividualRepository)
     {
-        private readonly AppDbContext _context;
+        _eventIndividualRepository = eventIndividualRepository;
+    }
 
-        public EventIndividualController(AppDbContext context)
+    // GET: api/EventIndividual
+    [HttpGet]
+    public async Task<IActionResult> GetEventIndividuals()
+    {
+        try
         {
-            _context = context;
+            var eventIndividuals = await _eventIndividualRepository.GetEventIndividuals();
+            return new OkObjectResult(eventIndividuals);
+        }
+        catch (Exception ex)
+        {
+            // Log the exception message
+            Console.WriteLine(ex.Message);
+            return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
+        }
+    }
+
+    // GET: api/EventIndividual/Event/5
+    [HttpGet("Event/{eventId}")]
+    public async Task<IActionResult> GetIndividualsForEvent(int eventId)
+    {
+        try
+        {
+            var eventIndividuals = await _eventIndividualRepository.GetIndividualsForEvent(eventId);
+            return new OkObjectResult(eventIndividuals);
+        }
+        catch (Exception ex)
+        {
+            // Log the exception message
+            Console.WriteLine(ex.Message);
+            return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
+        }
+    }
+
+    // GET: api/EventIndividual/5/1
+    [HttpGet("{eventId}/{individualId}")]
+    public async Task<IActionResult> GetEventIndividual(int eventId, int individualId)
+    {
+        try
+        {
+            var eventIndividual = await _eventIndividualRepository.GetEventIndividual(eventId, individualId);
+
+            if (eventIndividual == null)
+            {
+                return new NotFoundObjectResult(new { message = "EventIndividual not found" });
+            }
+
+            return new OkObjectResult(eventIndividual);
+        }
+        catch (Exception ex)
+        {
+            // Log the exception message
+            Console.WriteLine(ex.Message);
+            return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
+        }
+    }
+
+    // PUT: api/EventIndividual/5/1
+    [HttpPut("{eventId}/{individualId}")]
+    public async Task<IActionResult> PutEventIndividual(int eventId, int individualId, EventIndividual eventIndividual)
+    {
+        if (eventId != eventIndividual.EventID || individualId != eventIndividual.IndividualID)
+        {
+            return new BadRequestObjectResult(new { message = "Invalid request" });
         }
 
-        // GET: api/EventIndividual
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<EventIndividual>>> GetEventIndividuals()
+        try
         {
-            try
+            await _eventIndividualRepository.UpdateEventIndividual(eventIndividual);
+            return Ok();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await _eventIndividualRepository.EventIndividualExists(eventId, individualId))
             {
-                return await _context.EventIndividuals.ToListAsync();
+                return new NotFoundObjectResult(new { message = "EventIndividual not found" });
             }
-            catch (Exception ex)
+            else
             {
-                // Log the exception message
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
+                throw;
             }
         }
-
-        // GET: api/EventIndividual/Event/5
-        [HttpGet("Event/{eventId}")]
-        public async Task<ActionResult<IEnumerable<EventIndividual>>> GetIndividualsForEvent(int eventId)
+        catch (Exception ex)
         {
-            try
-            {
-                return await _context.EventIndividuals
-                    .Where(ei => ei.EventID == eventId)
-                    .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                // Log the exception message
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
-            }
+            // Log the exception message
+            Console.WriteLine(ex.Message);
+            return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
         }
+    }
 
-        // GET: api/EventIndividual/5/1
-        [HttpGet("{eventId}/{individualId}")]
-        public async Task<ActionResult<EventIndividual>> GetEventIndividual(int eventId, int individualId)
+    // POST: api/EventIndividual
+    [HttpPost]
+    public async Task<IActionResult> PostEventIndividual(EventIndividual eventIndividual)
+    {
+        try
         {
-            try
-            {
-                var eventIndividual = await _context.EventIndividuals.FindAsync(eventId, individualId);
-
-                if (eventIndividual == null)
-                {
-                    return NotFound();
-                }
-
-                return eventIndividual;
-            }
-            catch (Exception ex)
-            {
-                // Log the exception message
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
-            }
+            await _eventIndividualRepository.AddEventIndividual(eventIndividual);
+            return new CreatedAtActionResult("GetEventIndividual", "EventIndividual", new { eventId = eventIndividual.EventID, individualId = eventIndividual.IndividualID }, eventIndividual);
         }
-
-        // PUT: api/EventIndividual/5/1
-        [HttpPut("{eventId}/{individualId}")]
-        public async Task<IActionResult> PutEventIndividual(int eventId, int individualId, EventIndividual eventIndividual)
+        catch (Exception ex)
         {
-            if (eventId != eventIndividual.EventID || individualId != eventIndividual.IndividualID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(eventIndividual).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EventIndividualExists(eventId, individualId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log the exception message
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
-            }
-
-            return NoContent();
+            // Log the exception message
+            Console.WriteLine(ex.Message);
+            return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
         }
+    }
 
-        // POST: api/EventIndividual
-        [HttpPost]
-        public async Task<ActionResult<EventIndividual>> PostEventIndividual(EventIndividual eventIndividual)
+    // DELETE: api/EventIndividual/5/1
+    [HttpDelete("{eventId}/{individualId}")]
+    public async Task<IActionResult> DeleteEventIndividual(int eventId, int individualId)
+    {
+        try
         {
-            try
+            var eventIndividual = await _eventIndividualRepository.GetEventIndividual(eventId, individualId);
+            if (eventIndividual == null)
             {
-                _context.EventIndividuals.Add(eventIndividual);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                // Log the exception message
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
+                return new NotFoundObjectResult(new { message = "EventIndividual not found" });
             }
 
-            return CreatedAtAction("GetEventIndividual", new { eventId = eventIndividual.EventID, individualId = eventIndividual.IndividualID }, eventIndividual);
+            await _eventIndividualRepository.DeleteEventIndividual(eventId, individualId);
+            return Ok();
         }
-
-        // DELETE: api/EventIndividual/5/1
-        [HttpDelete("{eventId}/{individualId}")]
-        public async Task<IActionResult> DeleteEventIndividual(int eventId, int individualId)
+        catch (Exception ex)
         {
-            try
-            {
-                var eventIndividual = await _context.EventIndividuals.FindAsync(eventId, individualId);
-                if (eventIndividual == null)
-                {
-                    return NotFound();
-                }
-
-                _context.EventIndividuals.Remove(eventIndividual);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                // Log the exception message
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, "An error occurred while processing your request.");
-            }
-
-            return NoContent();
-        }
-
-        private bool EventIndividualExists(int eventId, int individualId)
-        {
-            return _context.EventIndividuals.Any(e => e.EventID == eventId && e.IndividualID == individualId);
+            // Log the exception message
+            Console.WriteLine(ex.Message);
+            return new ObjectResult(new { message = "An error occurred while processing your request.", error = ex.Message }) { StatusCode = StatusCodes.Status500InternalServerError };
         }
     }
 }

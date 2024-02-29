@@ -3,6 +3,7 @@
 @using RIK_Proovitöö.Components.Homepage
 @using RIK_Proovitöö.Services
 @inject IEventService EventService
+@inject NavigationManager NavigationManager
 
 <HomeIntro/>
 
@@ -35,6 +36,11 @@
                         }
                     </ol>
                 }
+                
+                    <div class="justify-content-start">
+                        <button class="btn text-secondary" @onclick="NavigateToAddEvent">Lisa Üritus</button>
+                    </div>
+                
             </div>
         </div>
 
@@ -71,6 +77,11 @@
 @code {
     private Event[]? upcomingEvents;
     private Event[]? pastEvents;
+
+        private void NavigateToAddEvent()
+        {
+            NavigationManager.NavigateTo("/AddEvent");
+        }
 
     protected override async Task OnInitializedAsync()
     {

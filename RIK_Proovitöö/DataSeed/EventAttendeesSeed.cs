@@ -7,9 +7,9 @@ public static class EventCompaniesSeed
     {
         var eventCompanies = new List<EventCompany>();
 
-        for (int i = 1; i <= 50; i++)
+        for (int i = 1; i <= 10; i++)
         {
-            for (int j = 1; j <= 50; j++)
+            for (int j = 1; j <= 10; j++)
             {
                 eventCompanies.Add(new EventCompany
                 {
@@ -23,15 +23,16 @@ public static class EventCompaniesSeed
     }
 }
 
+
 public static class EventIndividualsSeed
 {
     public static void Seed(ModelBuilder modelBuilder)
     {
         var eventIndividuals = new List<EventIndividual>();
 
-        for (int i = 1; i <= 50; i++)
+        for (int i = 1; i <= 10; i++)
         {
-            for (int j = 1; j <= 50; j++)
+            for (int j = 1; j <= 10; j++)
             {
                 eventIndividuals.Add(new EventIndividual
                 {
@@ -44,3 +45,6 @@ public static class EventIndividualsSeed
         modelBuilder.Entity<EventIndividual>().HasData(eventIndividuals);
     }
 }
+
+
+
