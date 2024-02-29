@@ -56,92 +56,92 @@ namespace RIK_Proovitöö.Migrations
                         new
                         {
                             ID = 1,
-                            CompanyAttendeeAmount = 18,
+                            CompanyAttendeeAmount = 43,
                             CompanyName = "Company 1",
                             ExtraInfo = "Test extra info 1",
                             PaymentType = 1,
-                            RegistryCode = 77076728913L
+                            RegistryCode = 77123954950L
                         },
                         new
                         {
                             ID = 2,
-                            CompanyAttendeeAmount = 15,
+                            CompanyAttendeeAmount = 31,
                             CompanyName = "Company 2",
                             ExtraInfo = "Test extra info 2",
                             PaymentType = 0,
-                            RegistryCode = 58523279186L
+                            RegistryCode = 87565072526L
                         },
                         new
                         {
                             ID = 3,
-                            CompanyAttendeeAmount = 3,
+                            CompanyAttendeeAmount = 86,
                             CompanyName = "Company 3",
                             ExtraInfo = "Test extra info 3",
                             PaymentType = 1,
-                            RegistryCode = 11643847822L
+                            RegistryCode = 41433813380L
                         },
                         new
                         {
                             ID = 4,
-                            CompanyAttendeeAmount = 17,
+                            CompanyAttendeeAmount = 15,
                             CompanyName = "Company 4",
                             ExtraInfo = "Test extra info 4",
                             PaymentType = 1,
-                            RegistryCode = 45937465593L
+                            RegistryCode = 42176155251L
                         },
                         new
                         {
                             ID = 5,
-                            CompanyAttendeeAmount = 56,
+                            CompanyAttendeeAmount = 80,
                             CompanyName = "Company 5",
                             ExtraInfo = "Test extra info 5",
-                            PaymentType = 1,
-                            RegistryCode = 37007095639L
+                            PaymentType = 0,
+                            RegistryCode = 56112707159L
                         },
                         new
                         {
                             ID = 6,
-                            CompanyAttendeeAmount = 37,
+                            CompanyAttendeeAmount = 52,
                             CompanyName = "Company 6",
                             ExtraInfo = "Test extra info 6",
                             PaymentType = 1,
-                            RegistryCode = 59874230416L
+                            RegistryCode = 15954689450L
                         },
                         new
                         {
                             ID = 7,
-                            CompanyAttendeeAmount = 11,
+                            CompanyAttendeeAmount = 41,
                             CompanyName = "Company 7",
                             ExtraInfo = "Test extra info 7",
-                            PaymentType = 0,
-                            RegistryCode = 71885517835L
+                            PaymentType = 1,
+                            RegistryCode = 39810279648L
                         },
                         new
                         {
                             ID = 8,
-                            CompanyAttendeeAmount = 85,
+                            CompanyAttendeeAmount = 77,
                             CompanyName = "Company 8",
                             ExtraInfo = "Test extra info 8",
-                            PaymentType = 0,
-                            RegistryCode = 43484919238L
+                            PaymentType = 1,
+                            RegistryCode = 19969956326L
                         },
                         new
                         {
                             ID = 9,
-                            CompanyAttendeeAmount = 19,
+                            CompanyAttendeeAmount = 60,
                             CompanyName = "Company 9",
                             ExtraInfo = "Test extra info 9",
                             PaymentType = 1,
-                            RegistryCode = 7246784685L
+                            RegistryCode = 2935804317L
                         },
                         new
                         {
                             ID = 10,
-                            CompanyAttendeeAmount = 51,
+                            CompanyAttendeeAmount = 25,
                             CompanyName = "Company 10",
                             ExtraInfo = "Test extra info 10",
-                            PaymentType = 0,
-                            RegistryCode = 48937849655L
+                            PaymentType = 1,
+                            RegistryCode = 25433291606L
                         });
                 });
 
@@ -178,70 +178,70 @@ namespace RIK_Proovitöö.Migrations
                         new
                         {
                             ID = 1,
-                            Date = new DateTime(2024, 10, 5, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9672),
+                            Date = new DateTime(2023, 12, 2, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4280),
                             Location = "Location1",
                             Name = "Event1"
                         },
                         new
                         {
                             ID = 2,
-                            Date = new DateTime(2024, 4, 15, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9713),
+                            Date = new DateTime(2023, 8, 14, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4320),
                             Location = "Location2",
                             Name = "Event2"
                         },
                         new
                         {
                             ID = 3,
-                            Date = new DateTime(2023, 8, 1, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9716),
+                            Date = new DateTime(2024, 5, 17, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4322),
                             Location = "Location3",
                             Name = "Event3"
                         },
                         new
                         {
                             ID = 4,
-                            Date = new DateTime(2024, 3, 25, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9718),
+                            Date = new DateTime(2024, 1, 20, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4325),
                             Location = "Location4",
                             Name = "Event4"
                         },
                         new
                         {
                             ID = 5,
-                            Date = new DateTime(2023, 7, 31, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9720),
+                            Date = new DateTime(2024, 3, 8, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4327),
                             Location = "Location5",
                             Name = "Event5"
                         },
                         new
                         {
                             ID = 6,
-                            Date = new DateTime(2024, 6, 17, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9723),
+                            Date = new DateTime(2024, 9, 6, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4330),
                             Location = "Location6",
                             Name = "Event6"
                         },
                         new
                         {
                             ID = 7,
-                            Date = new DateTime(2023, 11, 19, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9725),
+                            Date = new DateTime(2023, 7, 10, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4332),
                             Location = "Location7",
                             Name = "Event7"
                         },
                         new
                         {
                             ID = 8,
-                            Date = new DateTime(2023, 3, 15, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9727),
+                            Date = new DateTime(2024, 12, 31, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4354),
                             Location = "Location8",
                             Name = "Event8"
                         },
                         new
                         {
                             ID = 9,
-                            Date = new DateTime(2023, 9, 10, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9729),
+                            Date = new DateTime(2024, 7, 17, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4356),
                             Location = "Location9",
                             Name = "Event9"
                         },
                         new
                         {
                             ID = 10,
-                            Date = new DateTime(2023, 4, 27, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9732),
+                            Date = new DateTime(2024, 10, 2, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4360),
                             Location = "Location10",
                             Name = "Event10"
                         });
@@ -1321,7 +1321,7 @@ namespace RIK_Proovitöö.Migrations
                             FirstName = "First1",
                             LastName = "Last1",
                             PaymentType = 0,
-                            PersonalCode = 24685364055L
+                            PersonalCode = 46002710232L
                         },
                         new
                         {
@@ -1330,7 +1330,7 @@ namespace RIK_Proovitöö.Migrations
                             FirstName = "First2",
                             LastName = "Last2",
                             PaymentType = 1,
-                            PersonalCode = 3874062183L
+                            PersonalCode = 12416994081L
                         },
                         new
                         {
@@ -1339,7 +1339,7 @@ namespace RIK_Proovitöö.Migrations
                             FirstName = "First3",
                             LastName = "Last3",
                             PaymentType = 0,
-                            PersonalCode = 69375682923L
+                            PersonalCode = 61938462307L
                         },
                         new
                         {
@@ -1348,7 +1348,7 @@ namespace RIK_Proovitöö.Migrations
                             FirstName = "First4",
                             LastName = "Last4",
                             PaymentType = 0,
-                            PersonalCode = 62095199808L
+                            PersonalCode = 79201748549L
                         },
                         new
                         {
@@ -1357,7 +1357,7 @@ namespace RIK_Proovitöö.Migrations
                             FirstName = "First5",
                             LastName = "Last5",
                             PaymentType = 0,
-                            PersonalCode = 8756475892L
+                            PersonalCode = 1177739895L
                         },
                         new
                         {
@@ -1365,8 +1365,8 @@ namespace RIK_Proovitöö.Migrations
                             ExtraInfo = "Test extra info 6",
                             FirstName = "First6",
                             LastName = "Last6",
-                            PaymentType = 0,
-                            PersonalCode = 24004688340L
+                            PaymentType = 1,
+                            PersonalCode = 68745945131L
                         },
                         new
                         {
@@ -1374,8 +1374,8 @@ namespace RIK_Proovitöö.Migrations
                             ExtraInfo = "Test extra info 7",
                             FirstName = "First7",
                             LastName = "Last7",
-                            PaymentType = 0,
-                            PersonalCode = 29193954685L
+                            PaymentType = 1,
+                            PersonalCode = 42717135335L
                         },
                         new
                         {
@@ -1384,7 +1384,7 @@ namespace RIK_Proovitöö.Migrations
                             FirstName = "First8",
                             LastName = "Last8",
                             PaymentType = 1,
-                            PersonalCode = 22816975534L
+                            PersonalCode = 84201775727L
                         },
                         new
                         {
@@ -1393,7 +1393,7 @@ namespace RIK_Proovitöö.Migrations
                             FirstName = "First9",
                             LastName = "Last9",
                             PaymentType = 1,
-                            PersonalCode = 60117461554L
+                            PersonalCode = 86871840273L
                         },
                         new
                         {
@@ -1402,7 +1402,7 @@ namespace RIK_Proovitöö.Migrations
                             FirstName = "First10",
                             LastName = "Last10",
                             PaymentType = 0,
-                            PersonalCode = 95323698590L
+                            PersonalCode = 47804328631L
                         });
                 });
 

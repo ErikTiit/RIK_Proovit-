@@ -116,16 +116,16 @@ namespace RIK_Proovitöö.Migrations
                 columns: new[] { "ID", "CompanyAttendeeAmount", "CompanyName", "ExtraInfo", "PaymentType", "RegistryCode" },
                 values: new object[,]
                 {
-                    { 1, 18, "Company 1", "Test extra info 1", 1, 77076728913L },
-                    { 2, 15, "Company 2", "Test extra info 2", 0, 58523279186L },
-                    { 3, 3, "Company 3", "Test extra info 3", 1, 11643847822L },
-                    { 4, 17, "Company 4", "Test extra info 4", 1, 45937465593L },
-                    { 5, 56, "Company 5", "Test extra info 5", 1, 37007095639L },
-                    { 6, 37, "Company 6", "Test extra info 6", 1, 59874230416L },
-                    { 7, 11, "Company 7", "Test extra info 7", 0, 71885517835L },
-                    { 8, 85, "Company 8", "Test extra info 8", 0, 43484919238L },
-                    { 9, 19, "Company 9", "Test extra info 9", 1, 7246784685L },
-                    { 10, 51, "Company 10", "Test extra info 10", 0, 48937849655L }
+                    { 1, 43, "Company 1", "Test extra info 1", 1, 77123954950L },
+                    { 2, 31, "Company 2", "Test extra info 2", 0, 87565072526L },
+                    { 3, 86, "Company 3", "Test extra info 3", 1, 41433813380L },
+                    { 4, 15, "Company 4", "Test extra info 4", 1, 42176155251L },
+                    { 5, 80, "Company 5", "Test extra info 5", 0, 56112707159L },
+                    { 6, 52, "Company 6", "Test extra info 6", 1, 15954689450L },
+                    { 7, 41, "Company 7", "Test extra info 7", 1, 39810279648L },
+                    { 8, 77, "Company 8", "Test extra info 8", 1, 19969956326L },
+                    { 9, 60, "Company 9", "Test extra info 9", 1, 2935804317L },
+                    { 10, 25, "Company 10", "Test extra info 10", 1, 25433291606L }
                 });
 
             migrationBuilder.InsertData(
@@ -133,16 +133,16 @@ namespace RIK_Proovitöö.Migrations
                 columns: new[] { "ID", "Date", "ExtraInfo", "Location", "Name" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 10, 5, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9672), null, "Location1", "Event1" },
-                    { 2, new DateTime(2024, 4, 15, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9713), null, "Location2", "Event2" },
-                    { 3, new DateTime(2023, 8, 1, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9716), null, "Location3", "Event3" },
-                    { 4, new DateTime(2024, 3, 25, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9718), null, "Location4", "Event4" },
-                    { 5, new DateTime(2023, 7, 31, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9720), null, "Location5", "Event5" },
-                    { 6, new DateTime(2024, 6, 17, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9723), null, "Location6", "Event6" },
-                    { 7, new DateTime(2023, 11, 19, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9725), null, "Location7", "Event7" },
-                    { 8, new DateTime(2023, 3, 15, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9727), null, "Location8", "Event8" },
-                    { 9, new DateTime(2023, 9, 10, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9729), null, "Location9", "Event9" },
-                    { 10, new DateTime(2023, 4, 27, 16, 5, 43, 731, DateTimeKind.Local).AddTicks(9732), null, "Location10", "Event10" }
+                    { 1, new DateTime(2023, 12, 2, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4280), null, "Location1", "Event1" },
+                    { 2, new DateTime(2023, 8, 14, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4320), null, "Location2", "Event2" },
+                    { 3, new DateTime(2024, 5, 17, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4322), null, "Location3", "Event3" },
+                    { 4, new DateTime(2024, 1, 20, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4325), null, "Location4", "Event4" },
+                    { 5, new DateTime(2024, 3, 8, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4327), null, "Location5", "Event5" },
+                    { 6, new DateTime(2024, 9, 6, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4330), null, "Location6", "Event6" },
+                    { 7, new DateTime(2023, 7, 10, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4332), null, "Location7", "Event7" },
+                    { 8, new DateTime(2024, 12, 31, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4354), null, "Location8", "Event8" },
+                    { 9, new DateTime(2024, 7, 17, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4356), null, "Location9", "Event9" },
+                    { 10, new DateTime(2024, 10, 2, 17, 41, 16, 66, DateTimeKind.Local).AddTicks(4360), null, "Location10", "Event10" }
                 });
 
             migrationBuilder.InsertData(
@@ -150,16 +150,16 @@ namespace RIK_Proovitöö.Migrations
                 columns: new[] { "ID", "ExtraInfo", "FirstName", "LastName", "PaymentType", "PersonalCode" },
                 values: new object[,]
                 {
-                    { 1, "Test extra info 1", "First1", "Last1", 0, 24685364055L },
-                    { 2, "Test extra info 2", "First2", "Last2", 1, 3874062183L },
-                    { 3, "Test extra info 3", "First3", "Last3", 0, 69375682923L },
-                    { 4, "Test extra info 4", "First4", "Last4", 0, 62095199808L },
-                    { 5, "Test extra info 5", "First5", "Last5", 0, 8756475892L },
-                    { 6, "Test extra info 6", "First6", "Last6", 0, 24004688340L },
-                    { 7, "Test extra info 7", "First7", "Last7", 0, 29193954685L },
-                    { 8, "Test extra info 8", "First8", "Last8", 1, 22816975534L },
-                    { 9, "Test extra info 9", "First9", "Last9", 1, 60117461554L },
-                    { 10, "Test extra info 10", "First10", "Last10", 0, 95323698590L }
+                    { 1, "Test extra info 1", "First1", "Last1", 0, 46002710232L },
+                    { 2, "Test extra info 2", "First2", "Last2", 1, 12416994081L },
+                    { 3, "Test extra info 3", "First3", "Last3", 0, 61938462307L },
+                    { 4, "Test extra info 4", "First4", "Last4", 0, 79201748549L },
+                    { 5, "Test extra info 5", "First5", "Last5", 0, 1177739895L },
+                    { 6, "Test extra info 6", "First6", "Last6", 1, 68745945131L },
+                    { 7, "Test extra info 7", "First7", "Last7", 1, 42717135335L },
+                    { 8, "Test extra info 8", "First8", "Last8", 1, 84201775727L },
+                    { 9, "Test extra info 9", "First9", "Last9", 1, 86871840273L },
+                    { 10, "Test extra info 10", "First10", "Last10", 0, 47804328631L }
                 });
 
             migrationBuilder.InsertData(
